@@ -66,7 +66,7 @@ class Modul:
             True, wenn das Modul vom Studenten abgeschlossen wurde, False sonst
         """
         # Einfache Implementierung: Prüfen, ob mindestens eine Prüfung bestanden ist
-        return any(pl.bestanden for pl in self.pruefungsleistungen)
+        return any(pl.bestanden for pl in self.pruefungsleistungen if pl)
 
     def add_pruefungsleistung(self, pruefung: Pruefungsleistung) -> None:
         """
@@ -78,7 +78,8 @@ class Modul:
         Parameter:
             pruefung: Das Pruefungsleistung-Objekt, das hinzugefügt werden soll
         """
-        self.pruefungsleistungen.append(pruefung)
+        if pruefung:
+            self.pruefungsleistungen.append(pruefung)
 
     def get_current_grade(self) -> float:
         """
@@ -90,7 +91,7 @@ class Modul:
         Rückgabe:
             Die gewichtete Durchschnittsnote oder 0.0, wenn keine bestandenen Prüfungen vorhanden sind
         """
-        passed_exams = [pl for pl in self.pruefungsleistungen if pl.bestanden]
+        passed_exams = [pl for pl in self.pruefungsleistungen if pl and pl.bestanden]
         if not passed_exams:
             return 0.0
 
@@ -117,7 +118,7 @@ class Modul:
             "beschreibung": self.beschreibung,
             "ects": self.ects,
             "semesterZuordnung": self.semesterZuordnung,
-            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen]
+            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen if pl]
         }
 
     @classmethod

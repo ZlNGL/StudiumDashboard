@@ -33,6 +33,22 @@ class Dashboard:
         self.benutzerinteraktion = None  # Wird später von außen gesetzt
         self.visualisierung = None  # Wird später von außen gesetzt
 
+    def _handle_error(self, operation: str, error: Exception, fallback=None):
+        """
+        Zentrale Fehlerbehandlung für Dashboard-Operationen.
+
+        Parameter:
+            operation: Beschreibung der Operation
+            error: Die aufgetretene Exception
+            fallback: Rückgabewert im Fehlerfall
+
+        Rückgabe:
+            Der angegebene Fallback-Wert
+        """
+        print(f"Fehler bei {operation}: {error}")
+        # In einer produktiven Umgebung würde hier ein Logger verwendet
+        return fallback
+
     def initialisieren(self) -> bool:
         """
         Initialisiert das Dashboard durch Laden vorhandener Daten oder Erstellen neuer Objekte.
@@ -44,14 +60,17 @@ class Dashboard:
         Rückgabe:
             True, wenn die Initialisierung erfolgreich war, False sonst
         """
-        # Versuche, bestehende Daten zu laden
-        self.studiengang, self.student = self.daten_manager.laden()
+        try:
+            # Versuche, bestehende Daten zu laden
+            self.studiengang, self.student = self.daten_manager.laden()
 
-        # Wenn keine Daten existieren, gib False zurück
-        if not (self.studiengang and self.student):
-            return False
+            # Wenn keine Daten existieren, gib False zurück
+            if not (self.studiengang and self.student):
+                return False
 
-        return True
+            return True
+        except Exception as e:
+            return self._handle_error("Initialisierung des Dashboards", e, False)
 
     def create_new_data(self, student_data: Dict[str, Any], studiengang_data: Dict[str, Any]) -> bool:
         """
@@ -87,8 +106,7 @@ class Dashboard:
             # Speichere die Daten
             return self.daten_manager.speichern(self.studiengang, self.student)
         except Exception as e:
-            print(f"Fehler beim Erstellen neuer Daten: {e}")
-            return False
+            return self._handle_error("Erstellen neuer Daten", e, False)
 
     def aktualisieren(self) -> bool:
         """
@@ -116,10 +134,13 @@ class Dashboard:
         Rückgabe:
             Der aktuelle Notendurchschnitt oder 0.0, wenn kein Student vorhanden ist
         """
-        if not self.student:
-            return 0.0
+        try:
+            if not self.student:
+                return 0.0
 
-        return self.student.get_durchschnittnote()
+            return self.student.get_durchschnittnote()
+        except Exception as e:
+            return self._handle_error("Berechnung des Notendurchschnitts", e, 0.0)
 
     def berechne_ects_fortschritt(self) -> Dict[str, Union[int, float]]:
         """
@@ -135,18 +156,23 @@ class Dashboard:
             - 'gesamt': Gesamtzahl der benötigten ECTS
             - 'prozent': Prozentualer Fortschritt
         """
-        if not (self.studiengang and self.student):
-            return {"absolut": 0, "gesamt": 0, "prozent": 0.0}
+        try:
+            if not (self.studiengang and self.student):
+                return {"absolut": 0, "gesamt": 0, "prozent": 0.0}
 
-        absolut = self.student.get_ects_fortschritt()
-        gesamt = self.studiengang.gesamtECTS
-        prozent = (absolut / gesamt) * 100 if gesamt > 0 else 0.0
+            gesamt = self.studiengang.gesamtECTS
+            # Stelle sicher, dass absolvierte ECTS nicht größer als gesamt sind
+            absolut = min(self.student.get_ects_fortschritt(), gesamt)
+            prozent = (absolut / gesamt) * 100 if gesamt > 0 else 0.0
 
-        return {
-            "absolut": absolut,
-            "gesamt": gesamt,
-            "prozent": round(prozent, 2)  # Runde auf 2 Nachkommastellen für die Anzeige
-        }
+            return {
+                "absolut": absolut,
+                "gesamt": gesamt,
+                "prozent": round(prozent, 2)  # Runde auf 2 Nachkommastellen für die Anzeige
+            }
+        except Exception as e:
+            return self._handle_error("Berechnung des ECTS-Fortschritts", e,
+                                      {"absolut": 0, "gesamt": 0, "prozent": 0.0})
 
     def zeige_notenverteilung(self) -> Dict[str, int]:
         """
@@ -158,19 +184,22 @@ class Dashboard:
         Rückgabe:
             Ein Dictionary mit Noten als Schlüssel und ihrer Häufigkeit als Werte
         """
-        if not self.student:
-            return {}
+        try:
+            if not self.student:
+                return {}
 
-        pruefungen = self.student.get_pruefungsleistungen()
-        verteilung = {}
+            pruefungen = self.student.get_pruefungsleistungen()
+            verteilung = {}
 
-        # Zähle das Vorkommen jeder Note
-        for pruefung in pruefungen:
-            if pruefung.note:
-                note = str(pruefung.note.wert)
-                verteilung[note] = verteilung.get(note, 0) + 1
+            # Zähle das Vorkommen jeder Note
+            for pruefung in pruefungen:
+                if pruefung.note:
+                    note = str(pruefung.note.wert)
+                    verteilung[note] = verteilung.get(note, 0) + 1
 
-        return verteilung
+            return verteilung
+        except Exception as e:
+            return self._handle_error("Berechnung der Notenverteilung", e, {})
 
     def anstehende_pruefungen(self, tage: int = 30) -> List[Pruefungsleistung]:
         """
@@ -185,22 +214,25 @@ class Dashboard:
         Rückgabe:
             Eine Liste anstehender Pruefungsleistung-Objekte
         """
-        if not self.studiengang:
-            return []
+        try:
+            if not self.studiengang:
+                return []
 
-        today = date.today()
-        end_date = today + timedelta(days=tage)
+            today = date.today()
+            end_date = today + timedelta(days=tage)
 
-        upcoming = []
-        for modul in self.studiengang.get_all_module():
-            for pruefung in modul.pruefungsleistungen:
-                # Filtere Prüfungen, die im angegebenen Zeitraum liegen und nicht bestanden sind
-                if pruefung.datum and today <= pruefung.datum <= end_date and not pruefung.bestanden:
-                    upcoming.append(pruefung)
+            upcoming = []
+            for modul in self.studiengang.get_all_module():
+                for pruefung in modul.pruefungsleistungen:
+                    # Filtere Prüfungen, die im angegebenen Zeitraum liegen und nicht bestanden sind
+                    if pruefung.datum and today <= pruefung.datum <= end_date and not pruefung.bestanden:
+                        upcoming.append(pruefung)
 
-        # Sortiere nach Datum
-        upcoming.sort(key=lambda p: p.datum if p.datum else date.max)
-        return upcoming
+            # Sortiere nach Datum
+            upcoming.sort(key=lambda p: p.datum if p.datum else date.max)
+            return upcoming
+        except Exception as e:
+            return self._handle_error("Ermittlung anstehender Prüfungen", e, [])
 
     def zeige_semesterdurchschnitte(self) -> Dict[int, float]:
         """
@@ -213,29 +245,33 @@ class Dashboard:
             Ein Dictionary mit Semesternummern als Schlüssel und
             Durchschnittsnoten als Werte
         """
-        if not (self.studiengang and self.student):
-            return {}
+        try:
+            if not (self.studiengang and self.student):
+                return {}
 
-        semester_noten = {}
+            semester_noten = {}
 
-        # Durchlaufe alle Semester
-        for sem in self.studiengang.semester:
-            noten = []
-            # Sammle alle Noten aus den Modulen dieses Semesters
-            for modul in sem.module:
-                for pruefung in modul.pruefungsleistungen:
-                    if pruefung.bestanden and pruefung.note:
-                        noten.append((pruefung.note.wert, pruefung.note.gewichtung))
+            # Durchlaufe alle Semester
+            for sem in self.studiengang.semester:
+                noten = []
+                # Sammle alle Noten aus den Modulen dieses Semesters
+                for modul in sem.module:
+                    for pruefung in modul.pruefungsleistungen:
+                        if pruefung.bestanden and pruefung.note:
+                            noten.append((pruefung.note.wert, pruefung.note.gewichtung))
 
-            # Berechne den gewichteten Durchschnitt für dieses Semester
-            if noten:
-                gewichtete_summe = sum(note * gewicht for note, gewicht in noten)
-                gesamt_gewicht = sum(gewicht for _, gewicht in noten)
-                semester_noten[sem.nummer] = round(gewichtete_summe / gesamt_gewicht, 2) if gesamt_gewicht > 0 else 0.0
-            else:
-                semester_noten[sem.nummer] = 0.0
+                # Berechne den gewichteten Durchschnitt für dieses Semester
+                if noten:
+                    gewichtete_summe = sum(note * gewicht for note, gewicht in noten)
+                    gesamt_gewicht = sum(gewicht for _, gewicht in noten)
+                    semester_noten[sem.nummer] = round(gewichtete_summe / gesamt_gewicht,
+                                                       2) if gesamt_gewicht > 0 else 0.0
+                else:
+                    semester_noten[sem.nummer] = 0.0
 
-        return semester_noten
+            return semester_noten
+        except Exception as e:
+            return self._handle_error("Berechnung der Semesterdurchschnitte", e, {})
 
     def erfasse_note(self, modul_name: str, pruefung_data: Dict[str, Any]) -> bool:
         """
@@ -294,8 +330,7 @@ class Dashboard:
             # Speichere Änderungen
             return self.aktualisieren()
         except Exception as e:
-            print(f"Fehler beim Erfassen der Note: {e}")
-            return False
+            return self._handle_error("Erfassen einer Note", e, False)
 
     def speichern(self) -> bool:
         """
@@ -331,14 +366,14 @@ class Dashboard:
         if not self.studiengang:
             return False
 
-        # Finde oder erstelle das Semester
-        semester = self.studiengang.get_semester(semester_nummer)
-        if not semester:
-            print(f"Semester {semester_nummer} nicht gefunden. Erstelle neu.")
-            semester = Semester(nummer=semester_nummer)
-            self.studiengang.add_semester(semester)
-
         try:
+            # Finde oder erstelle das Semester
+            semester = self.studiengang.get_semester(semester_nummer)
+            if not semester:
+                print(f"Semester {semester_nummer} nicht gefunden. Erstelle neu.")
+                semester = Semester(nummer=semester_nummer)
+                self.studiengang.add_semester(semester)
+
             # Erstelle Modul
             modul = Modul(
                 modulName=modul_data.get("name", "Unbekanntes Modul"),
@@ -354,8 +389,7 @@ class Dashboard:
             # Speichere Änderungen
             return self.aktualisieren()
         except Exception as e:
-            print(f"Fehler beim Erfassen des Moduls: {e}")
-            return False
+            return self._handle_error("Erfassen eines Moduls", e, False)
 
     def bearbeite_ziele(self, ziel_durchschnitt: float) -> bool:
         """
@@ -377,8 +411,7 @@ class Dashboard:
             self.student.zielNotendurchschnitt = float(ziel_durchschnitt)
             return self.aktualisieren()
         except Exception as e:
-            print(f"Fehler beim Bearbeiten des Ziels: {e}")
-            return False
+            return self._handle_error("Bearbeiten des Ziels", e, False)
 
     def exportiere_daten(self, export_pfad: str = "noten_export.csv") -> bool:
         """
@@ -396,7 +429,10 @@ class Dashboard:
         if not self.student:
             return False
 
-        return self.daten_manager.export_csv(self.student, export_pfad)
+        try:
+            return self.daten_manager.export_csv(self.student, export_pfad)
+        except Exception as e:
+            return self._handle_error("Exportieren der Daten", e, False)
 
     def importiere_daten(self, import_pfad: str) -> bool:
         """
@@ -414,4 +450,7 @@ class Dashboard:
         if not (self.studiengang and self.student):
             return False
 
-        return self.daten_manager.import_csv(self.student, self.studiengang, import_pfad)
+        try:
+            return self.daten_manager.import_csv(self.student, self.studiengang, import_pfad)
+        except Exception as e:
+            return self._handle_error("Importieren der Daten", e, False)

@@ -112,10 +112,18 @@ class Studiengang:
             "offen": []  # Noch nicht belegte Module
         }
 
+        # Prüfe, ob der Student existiert
+        if not student:
+            return result
+
+        # Zähle das Vorkommen jeder Note
         for modul in self.get_all_module():
-            if student.hat_modul_bestanden(modul):
+            if not modul or not hasattr(modul, 'pruefungsleistungen'):
+                continue
+
+            if student and student.hat_modul_bestanden(modul):
                 result["bestanden"].append(modul)
-            elif any(pl in student.pruefungsleistungen for pl in modul.pruefungsleistungen):
+            elif student and any(pl in student.pruefungsleistungen for pl in modul.pruefungsleistungen if pl):
                 result["belegt"].append(modul)
             else:
                 result["offen"].append(modul)

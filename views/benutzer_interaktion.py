@@ -216,11 +216,15 @@ class BenutzerInteraktion:
             pruefung_data = {}
             pruefung_data["art"] = input("Prüfungsart (Klausur, Hausarbeit, etc.): ")
 
-            # Erfasse optionales Datum
+            # Erfasse optionales Datum mit verbesserter Fehlerbehandlung
             datum_str = input("Datum (TT.MM.JJJJ, leer für heute): ")
             if datum_str:
-                tag, monat, jahr = map(int, datum_str.split('.'))
-                pruefung_data["datum"] = date(jahr, monat, tag)
+                try:
+                    tag, monat, jahr = map(int, datum_str.split('.'))
+                    pruefung_data["datum"] = date(jahr, monat, tag)
+                except (ValueError, IndexError) as e:
+                    print(f"Ungültiges Datumsformat: {e}. Verwende heutiges Datum.")
+                    pruefung_data["datum"] = date.today()
             else:
                 pruefung_data["datum"] = date.today()
 
@@ -229,11 +233,19 @@ class BenutzerInteraktion:
 
             # Erfasse Note und konvertiere Komma zu Punkt für float-Parsing
             wert_str = input("Note (z.B. 1.7): ")
-            pruefung_data["wert"] = float(wert_str.replace(',', '.'))
+            try:
+                pruefung_data["wert"] = float(wert_str.replace(',', '.'))
+            except ValueError:
+                print("Ungültiger Notenwert. Bitte eine Zahl eingeben.")
+                return
 
             # Erfasse optionale Gewichtung
             gewichtung_str = input("Gewichtung (1.0 für normal): ")
-            pruefung_data["gewichtung"] = float(gewichtung_str.replace(',', '.')) if gewichtung_str else 1.0
+            try:
+                pruefung_data["gewichtung"] = float(gewichtung_str.replace(',', '.')) if gewichtung_str else 1.0
+            except ValueError:
+                print("Ungültige Gewichtung. Verwende Standardgewichtung 1.0.")
+                pruefung_data["gewichtung"] = 1.0
 
             # Speichere die Note
             if self.dashboard.erfasse_note(modul.modulName, pruefung_data):
@@ -458,20 +470,28 @@ class BenutzerInteraktion:
         student_data["vorname"] = input("Vorname: ")
         student_data["nachname"] = input("Nachname: ")
 
-        # Erfasse Geburtsdatum
+        # Erfasse Geburtsdatum mit verbesserter Fehlerbehandlung
         geburtsdatum_str = input("Geburtsdatum (TT.MM.JJJJ, leer für heute): ")
         if geburtsdatum_str:
-            tag, monat, jahr = map(int, geburtsdatum_str.split('.'))
-            student_data["geburtsdatum"] = date(jahr, monat, tag)
+            try:
+                tag, monat, jahr = map(int, geburtsdatum_str.split('.'))
+                student_data["geburtsdatum"] = date(jahr, monat, tag)
+            except (ValueError, IndexError) as e:
+                print(f"Ungültiges Datumsformat: {e}. Verwende heutiges Datum.")
+                student_data["geburtsdatum"] = date.today()
         else:
             student_data["geburtsdatum"] = date.today()
 
         student_data["matrikelNr"] = input("Matrikel-Nr: ")
         student_data["email"] = input("E-Mail: ")
 
-        # Erfasse Ziel-Notendurchschnitt
+        # Erfasse Ziel-Notendurchschnitt mit verbesserter Fehlerbehandlung
         ziel_str = input("Ziel-Notendurchschnitt (Standard: 2.0): ")
-        student_data["zielNotendurchschnitt"] = float(ziel_str.replace(',', '.')) if ziel_str else 2.0
+        try:
+            student_data["zielNotendurchschnitt"] = float(ziel_str.replace(',', '.')) if ziel_str else 2.0
+        except ValueError:
+            print("Ungültiger Ziel-Notendurchschnitt. Verwende Standardwert 2.0.")
+            student_data["zielNotendurchschnitt"] = 2.0
 
         return student_data
 

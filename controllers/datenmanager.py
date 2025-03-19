@@ -43,6 +43,10 @@ class DatenManager:
             True, wenn der Speichervorgang erfolgreich war, False sonst
         """
         try:
+            # Stelle sicher, dass beide Objekte existieren
+            if not studiengang or not student:
+                raise ValueError("Studiengang und Student müssen angegeben werden")
+
             # Erstelle ein Dictionary mit den zu speichernden Daten
             data = {
                 "studiengang": studiengang.to_dict(),
@@ -83,11 +87,19 @@ class DatenManager:
             with open(self.datei_pfad, 'r', encoding='utf-8') as file:
                 data = json.load(file)
 
+            # Überprüfe, ob die erwarteten Schlüssel vorhanden sind
+            if "studiengang" not in data or "student" not in data:
+                print(f"Ungültiges Dateiformat: Erforderliche Schlüssel fehlen")
+                return None, None
+
             # Konvertiere die geladenen Daten zurück in Objekte
             studiengang = Studiengang.from_dict(data["studiengang"])
             student = Student.from_dict(data["student"])
 
             return studiengang, student
+        except json.JSONDecodeError as e:
+            print(f"Fehler beim Parsen der JSON-Datei: {e}")
+            return None, None
         except Exception as e:
             print(f"Fehler beim Laden: {e}")
             return None, None
@@ -107,7 +119,15 @@ class DatenManager:
             True, wenn der Export erfolgreich war, False sonst
         """
         try:
+            if not student:
+                raise ValueError("Student muss angegeben werden")
+
             pruefungen = student.get_pruefungsleistungen()
+
+            # Erstelle das Verzeichnis, falls es nicht existiert
+            directory = os.path.dirname(export_pfad)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory)
 
             # Erstelle die CSV-Datei und schreibe die Daten
             with open(export_pfad, 'w', newline='', encoding='utf-8') as file:
@@ -160,6 +180,15 @@ class DatenManager:
                 print(f"Import-Datei nicht gefunden: {import_pfad}")
                 return False
 
+            # Überprüfe die CSV-Struktur
+            required_columns = ["Prüfungsart", "Datum", "Beschreibung", "Note", "Gewichtung", "Bestanden"]
+            with open(import_pfad, 'r', newline='', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                header = next(reader, None)
+                if not header or not all(col in header for col in required_columns):
+                    print(f"CSV-Datei hat nicht das erwartete Format. Benötigte Spalten: {required_columns}")
+                    return False
+
             # Lese die CSV-Datei
             with open(import_pfad, 'r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
@@ -178,13 +207,18 @@ class DatenManager:
                         # Füge Note hinzu, falls vorhanden
                         note_wert = row.get("Note")
                         if note_wert and note_wert != "N/A":
-                            gewichtung = float(row.get("Gewichtung", 1.0))
-                            note = Note(
-                                typ=row.get("Prüfungsart", "Unbekannt"),
-                                wert=float(note_wert),
-                                gewichtung=gewichtung
-                            )
-                            pruefung.set_note(note)
+                            try:
+                                note_wert_float = float(note_wert)
+                                gewichtung = float(row.get("Gewichtung", 1.0))
+                                note = Note(
+                                    typ=row.get("Prüfungsart", "Unbekannt"),
+                                    wert=note_wert_float,
+                                    gewichtung=gewichtung
+                                )
+                                pruefung.set_note(note)
+                            except ValueError:
+                                print(f"Ungültiger Notenwert: {note_wert}. Überspringe Note.")
+                                continue
 
                         # Füge zum Studenten hinzu
                         student.add_pruefungsleistung(pruefung)

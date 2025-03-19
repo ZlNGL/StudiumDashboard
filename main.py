@@ -193,33 +193,39 @@ def main():
         # Erfasse und verarbeite Benutzereingabe
         choice = input("\nAuswahl treffen (0-9): ")
 
-        # Führe die entsprechende Aktion basierend auf der Benutzereingabe aus
-        if choice == '0':
-            running = False  # Beende die Schleife und das Programm
-        elif choice == '1':
-            benutzerinteraktion.zeige_notendurchschnitt()  # Zeige Notendurchschnitt an
-        elif choice == '2':
-            benutzerinteraktion.zeige_ects_fortschritt()  # Zeige ECTS-Fortschritt an
-        elif choice == '3':
-            benutzerinteraktion.zeige_notenverteilung()  # Zeige Notenverteilung an
-            benutzerinteraktion.erstelle_grafiken()  # Erstelle optional Grafiken
-        elif choice == '4':
-            benutzerinteraktion.zeige_anstehende_pruefungen()  # Zeige anstehende Prüfungen an
-        elif choice == '5':
-            benutzerinteraktion.erfasse_note()  # Erfasse eine neue Note
-        elif choice == '6':
-            benutzerinteraktion.erfasse_modul()  # Erfasse ein neues Modul
-        elif choice == '7':
-            benutzerinteraktion.bearbeite_ziele()  # Bearbeite Ziel-Notendurchschnitt
-        elif choice == '8':
-            benutzerinteraktion.exportiere_daten()  # Exportiere Daten
-        elif choice == '9':
-            benutzerinteraktion.importiere_daten()  # Importiere Daten
-        else:
-            print("Ungültige Auswahl. Bitte erneut versuchen.")
+        # Verbesserte Eingabevalidierung
+        try:
+            choice_num = int(choice)
+            if choice_num < 0 or choice_num > 9:
+                print("Ungültige Auswahl. Bitte eine Zahl zwischen 0 und 9 eingeben.")
+                continue
+
+            # Führe die entsprechende Aktion basierend auf der Benutzereingabe aus
+            if choice_num == 0:
+                running = False  # Beende die Schleife und das Programm
+            elif choice_num == 1:
+                benutzerinteraktion.zeige_notendurchschnitt()  # Zeige Notendurchschnitt an
+            elif choice_num == 2:
+                benutzerinteraktion.zeige_ects_fortschritt()  # Zeige ECTS-Fortschritt an
+            elif choice_num == 3:
+                benutzerinteraktion.zeige_notenverteilung()  # Zeige Notenverteilung an
+                benutzerinteraktion.erstelle_grafiken()  # Erstelle optional Grafiken
+            elif choice_num == 4:
+                benutzerinteraktion.zeige_anstehende_pruefungen()  # Zeige anstehende Prüfungen an
+            elif choice_num == 5:
+                benutzerinteraktion.erfasse_note()  # Erfasse eine neue Note
+            elif choice_num == 6:
+                benutzerinteraktion.erfasse_modul()  # Erfasse ein neues Modul
+            elif choice_num == 7:
+                benutzerinteraktion.bearbeite_ziele()  # Bearbeite Ziel-Notendurchschnitt
+            elif choice_num == 8:
+                benutzerinteraktion.exportiere_daten()  # Exportiere Daten
+            elif choice_num == 9:
+                benutzerinteraktion.importiere_daten()  # Importiere Daten
+        except ValueError:
+            print("Ungültige Eingabe. Bitte eine Zahl eingeben.")
 
     print("Programm wird beendet. Auf Wiedersehen!")
-
 
 if __name__ == "__main__":
     # Dieser Block wird nur ausgeführt, wenn die Datei direkt gestartet wird
