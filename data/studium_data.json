@@ -1,0 +1,528 @@
+{
+    "studiengang": {
+        "name": "Informatik Bachelor",
+        "gesamtECTS": 180,
+        "semester": [
+            {
+                "nummer": 1,
+                "startDatum": "2022-04-01",
+                "endDatum": "2022-09-30",
+                "recommendedECTS": 30,
+                "status": "abgeschlossen",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 1.1",
+                        "modulID": "M11",
+                        "beschreibung": "Beschreibung für Modul 1.1",
+                        "ects": 10,
+                        "semesterZuordnung": 1,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2022-07-15",
+                                "beschreibung": "Prüfung für Modul 1.1",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 1.3,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 1.2",
+                        "modulID": "M12",
+                        "beschreibung": "Beschreibung für Modul 1.2",
+                        "ects": 5,
+                        "semesterZuordnung": 1,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Hausarbeit",
+                                "datum": "2022-07-15",
+                                "beschreibung": "Prüfung für Modul 1.2",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 2.0,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 1.3",
+                        "modulID": "M13",
+                        "beschreibung": "Beschreibung für Modul 1.3",
+                        "ects": 15,
+                        "semesterZuordnung": 1,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2022-07-15",
+                                "beschreibung": "Prüfung für Modul 1.3",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 1.7,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nummer": 2,
+                "startDatum": "2022-10-01",
+                "endDatum": "2022-03-30",
+                "recommendedECTS": 30,
+                "status": "abgeschlossen",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 2.1",
+                        "modulID": "M21",
+                        "beschreibung": "Beschreibung für Modul 2.1",
+                        "ects": 10,
+                        "semesterZuordnung": 2,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2022-02-15",
+                                "beschreibung": "Prüfung für Modul 2.1",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 2.3,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 2.2",
+                        "modulID": "M22",
+                        "beschreibung": "Beschreibung für Modul 2.2",
+                        "ects": 5,
+                        "semesterZuordnung": 2,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Hausarbeit",
+                                "datum": "2022-02-15",
+                                "beschreibung": "Prüfung für Modul 2.2",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 3.0,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 2.3",
+                        "modulID": "M23",
+                        "beschreibung": "Beschreibung für Modul 2.3",
+                        "ects": 15,
+                        "semesterZuordnung": 2,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2022-02-15",
+                                "beschreibung": "Prüfung für Modul 2.3",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 1.0,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nummer": 3,
+                "startDatum": "2023-04-01",
+                "endDatum": "2023-09-30",
+                "recommendedECTS": 30,
+                "status": "aktiv",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 3.1",
+                        "modulID": "M31",
+                        "beschreibung": "Beschreibung für Modul 3.1",
+                        "ects": 10,
+                        "semesterZuordnung": 3,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2023-07-15",
+                                "beschreibung": "Prüfung für Modul 3.1",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "Note",
+                                    "wert": 2.7,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-18",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 3.2",
+                        "modulID": "M32",
+                        "beschreibung": "Beschreibung für Modul 3.2",
+                        "ects": 5,
+                        "semesterZuordnung": 3,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2025-04-01",
+                                "beschreibung": "Anstehende Prüfung für Modul 3.2",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": null,
+                                "bestanden": false
+                            }
+                        ]
+                    },
+                    {
+                        "modulName": "Modul 3.3",
+                        "modulID": "M33",
+                        "beschreibung": "Beschreibung für Modul 3.3",
+                        "ects": 15,
+                        "semesterZuordnung": 3,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Hausarbeit",
+                                "datum": "2025-04-01",
+                                "beschreibung": "Anstehende Prüfung für Modul 3.3",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": null,
+                                "bestanden": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nummer": 4,
+                "startDatum": "2023-10-01",
+                "endDatum": "2023-03-30",
+                "recommendedECTS": 30,
+                "status": "geplant",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 4.1",
+                        "modulID": "M41",
+                        "beschreibung": "Beschreibung für Modul 4.1",
+                        "ects": 10,
+                        "semesterZuordnung": 4,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 4.2",
+                        "modulID": "M42",
+                        "beschreibung": "Beschreibung für Modul 4.2",
+                        "ects": 5,
+                        "semesterZuordnung": 4,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 4.3",
+                        "modulID": "M43",
+                        "beschreibung": "Beschreibung für Modul 4.3",
+                        "ects": 15,
+                        "semesterZuordnung": 4,
+                        "pruefungsleistungen": [
+                            {
+                                "art": "Klausur",
+                                "datum": "2025-03-19",
+                                "beschreibung": "",
+                                "deadline": null,
+                                "versuche": 1,
+                                "anmerkung": "",
+                                "note": {
+                                    "typ": "",
+                                    "wert": 1.0,
+                                    "gewichtung": 1.0,
+                                    "datum": "2025-03-19",
+                                    "kommentar": "",
+                                    "punkte": 0
+                                },
+                                "bestanden": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nummer": 5,
+                "startDatum": "2024-04-01",
+                "endDatum": "2024-09-30",
+                "recommendedECTS": 30,
+                "status": "geplant",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 5.1",
+                        "modulID": "M51",
+                        "beschreibung": "Beschreibung für Modul 5.1",
+                        "ects": 10,
+                        "semesterZuordnung": 5,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 5.2",
+                        "modulID": "M52",
+                        "beschreibung": "Beschreibung für Modul 5.2",
+                        "ects": 5,
+                        "semesterZuordnung": 5,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 5.3",
+                        "modulID": "M53",
+                        "beschreibung": "Beschreibung für Modul 5.3",
+                        "ects": 15,
+                        "semesterZuordnung": 5,
+                        "pruefungsleistungen": []
+                    }
+                ]
+            },
+            {
+                "nummer": 6,
+                "startDatum": "2024-10-01",
+                "endDatum": "2024-03-30",
+                "recommendedECTS": 30,
+                "status": "geplant",
+                "aktiv": false,
+                "module": [
+                    {
+                        "modulName": "Modul 6.1",
+                        "modulID": "M61",
+                        "beschreibung": "Beschreibung für Modul 6.1",
+                        "ects": 10,
+                        "semesterZuordnung": 6,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 6.2",
+                        "modulID": "M62",
+                        "beschreibung": "Beschreibung für Modul 6.2",
+                        "ects": 5,
+                        "semesterZuordnung": 6,
+                        "pruefungsleistungen": []
+                    },
+                    {
+                        "modulName": "Modul 6.3",
+                        "modulID": "M63",
+                        "beschreibung": "Beschreibung für Modul 6.3",
+                        "ects": 15,
+                        "semesterZuordnung": 6,
+                        "pruefungsleistungen": []
+                    }
+                ]
+            }
+        ]
+    },
+    "student": {
+        "vorname": "Max",
+        "nachname": "Mustermann",
+        "geburtsdatum": "1995-05-15",
+        "email": "max.mustermann@example.com",
+        "matrikelNr": "123456",
+        "immatrikulationsdatum": "2025-03-18",
+        "zielNotendurchschnitt": 2.0,
+        "absolvierteECTS": 105,
+        "fokus": "Informatik",
+        "aktuelleSemesterZahl": 3,
+        "pruefungsleistungen": [
+            {
+                "art": "Klausur",
+                "datum": "2022-07-15",
+                "beschreibung": "Prüfung für Modul 1.1",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 1.3,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Hausarbeit",
+                "datum": "2022-07-15",
+                "beschreibung": "Prüfung für Modul 1.2",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 2.0,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Klausur",
+                "datum": "2022-07-15",
+                "beschreibung": "Prüfung für Modul 1.3",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 1.7,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Klausur",
+                "datum": "2022-02-15",
+                "beschreibung": "Prüfung für Modul 2.1",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 2.3,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Hausarbeit",
+                "datum": "2022-02-15",
+                "beschreibung": "Prüfung für Modul 2.2",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 3.0,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Klausur",
+                "datum": "2022-02-15",
+                "beschreibung": "Prüfung für Modul 2.3",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 1.0,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Klausur",
+                "datum": "2023-07-15",
+                "beschreibung": "Prüfung für Modul 3.1",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "Note",
+                    "wert": 2.7,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-18",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            },
+            {
+                "art": "Klausur",
+                "datum": "2025-03-19",
+                "beschreibung": "",
+                "deadline": null,
+                "versuche": 1,
+                "anmerkung": "",
+                "note": {
+                    "typ": "",
+                    "wert": 1.0,
+                    "gewichtung": 1.0,
+                    "datum": "2025-03-19",
+                    "kommentar": "",
+                    "punkte": 0
+                },
+                "bestanden": true
+            }
+        ]
+    }
+}
