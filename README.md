@@ -1,117 +1,60 @@
 # Studium Dashboard
 
-Ein umfassendes Dashboard zur Überwachung des akademischen Fortschritts, mit Fokus auf die Kontrolle des Notendurchschnitts und der ECTS-Credits.
+Ein Dashboard zur Überwachung des akademischen Fortschritts, mit Fokus auf Notendurchschnitt und ECTS-Credits.
 
 ## Projektbeschreibung
-
-Dieses Dashboard ermöglicht es Studierenden, ihren akademischen Fortschritt zu verfolgen, wobei der Fokus auf:
-- Notendurchschnitt-Überwachung mit Zielerreichung
+Diese Anwendung ermöglicht (Studierenden):
+- Kontrolle des Notendurchschnitts und Zielerreichung
 - ECTS-Fortschrittsverfolgung
-- Visuelle Darstellung von Noten und Fortschritt
+- Visuelle Darstellung von Noten und Leistungen
 - Verwaltung von Modulen, Semestern und Prüfungen
-liegt.
 
-Die Anwendung ist nach dem Model-View-Controller-Muster konzipiert, wodurch eine saubere Trennung der Zuständigkeiten und Wartbarkeit gewährleistet wird.
-
-## GitHub Repository
-
-Der vollständige Quellcode für dieses Projekt ist auf GitHub verfügbar:
-[https://github.com/ZlNGL/studium-dashboard](https://github.com/ZlNGL/studium-dashboard)
-
-## Installationsanleitung
-
-### Voraussetzungen
-- Python 3.6 oder höher
-- matplotlib Bibliothek
-
-### Schritt 1: Repository klonen
+## Installation
 ```bash
 git clone https://github.com/ZlNGL/studium-dashboard.git
 cd studium-dashboard
-```
-
-### Schritt 2: Virtuelle Umgebung erstellen (optional, aber empfohlen)
-#### Unter Windows:
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-#### Unter macOS/Linux:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Schritt 3: Abhängigkeiten installieren
-```bash
-pip install matplotlib
-```
-oder
-```bash
+python -m venv venv                 # Optional
+source venv/bin/activate            # Unix/macOS
+# oder venv\Scripts\activate        # Windows
 pip install -r requirements.txt
-```
-
-### Schritt 4: Anwendung starten
-```bash
 python main.py
 ```
 
 ## Projektstruktur
 ```
 studium-dashboard/
-├── models/                 # Enthält alle Modellklassen
-│   ├── __init__.py         # Macht Modellklassen importierbar
-│   ├── person.py           # Basisklasse für Personen
-│   ├── student.py          # Erweiterung von Person für Studenten
-│   ├── note.py             # Repräsentiert eine Note
-│   ├── pruefungsleistung.py # Repräsentiert eine Prüfungsleistung
-│   ├── modul.py            # Repräsentiert ein Modul
-│   ├── semester.py         # Repräsentiert ein Semester
-│   └── studiengang.py      # Repräsentiert einen Studiengang
-├── controllers/            # Enthält Controller-Klassen
-│   ├── __init__.py         # Macht Controller-Klassen importierbar
-│   ├── datenmanager.py     # Verwaltet Datenpersistenz
-│   └── dashboard.py        # Hauptcontroller der Anwendung
-├── views/                  # Enthält View-Klassen
-│   ├── __init__.py         # Macht View-Klassen importierbar
-│   ├── dashboard_visualisierung.py # Erstellt Visualisierungen
-│   └── benutzer_interaktion.py    # Verwaltet Benutzerinteraktion
-├── main.py                 # Haupteinstiegspunkt der Anwendung
-├── requirements.txt        # Liste der Abhängigkeiten
-└── data/                   # Verzeichnis für Daten und Grafiken
-    ├── studium_data.json   # Gespeicherte Anwendungsdaten
-    └── grafiken/           # Generierte Diagramme und Visualisierungen
+├── models/                 # Modellklassen (Student, Modul, etc.)
+├── controllers/            # Controller-Klassen
+├── views/                  # View-Klassen
+├── tests/                  # Testfälle
+│   ├── models/             # Tests für Modellklassen
+│   ├── controllers/        # Tests für Controller
+│   └── run_tests.py        # Test-Runner
+├── main.py                 # Haupteinstiegspunkt
+└── data/                   # Daten und Grafiken
 ```
 
 ## Schnellstart
-
-Bei der ersten Ausführung der Anwendung werden Sie gefragt, ob Sie Beispieldaten erstellen oder eigene Daten eingeben möchten:
-
-1. **Beispieldaten**: Wählen Sie "j", um einen Beispielstudenten mit Musterdaten zu erstellen
-2. **Eigene Daten**: Wählen Sie "n", um Ihren eigenen Studenten und Studiengang zu erstellen
-
-Anschließend können über das Hauptmenü verschiedene Funktionen genutzt werden:
-
-- Notendurchschnitt und ECTS-Fortschritt anzeigen
-- Notenverteilung und anstehende Prüfungen einsehen
-- Neue Noten und Module erfassen
-- Ziel-Notendurchschnitt bearbeiten
-- Daten im CSV-Format ex- und importieren
+1. Starten Sie die Anwendung mit `python main.py`
+2. Wählen Sie "j" für Beispieldaten oder "n" für eigene Eingaben
+3. Nutzen Sie das Hauptmenü für Funktionen wie Notendurchschnitt anzeigen, Prüfungen erfassen oder Daten exportieren
 
 ## Features
+- **Notenverwaltung**: Nachverfolgung von Noten und Prüfungen mit Zielvorgaben.
+- **Fortschrittsverfolgung**: Visualisierung des ECTS-Fortschritts und der Semesterleistungen.
+- **Datenimport/-export**: CSV-basierter In-/Export für Datensicherung und Datenübertragung.
 
-- **Notenverfolgung**: Überwachen des aktuellen Notendurchschnitts im Vergleich zum Ziel-Notendurchschnitt
-- **ECTS-Fortschritt**: Verfolgen der absolvierten ECTS-Credits und verbleibenden Anforderungen
-- **Visuelle Diagramme**: Betrachten des Studium- Fortschritts und die Notenverteilung als Diagramme
-- **Prüfungsverwaltung**: Erfassen und verfolgen von anstehenden Prüfungen
-- **Modulverwaltung**: Organisieren der Kurse nach Semestern und verfolgen der Abschlüsse
-- **Datenimport/-export**: Importieren und exportieren der Daten als CSV-Dateien
+## Tests ausführen
+```bash
+# Alle Tests ausführen
+python -m tests.run_tests
+
+# Bestimmte Tests ausführen
+python -m tests.run_tests tests.models.test_student
+
+```
 
 ## Fehlerbehebung
-
-- **Installationsprobleme**: Stellen Sie sicher, dass Python 3.6+ und pip korrekt installiert sind
-- **Fehlende Diagramme**: Stellen Sie sicher, dass das Verzeichnis 'data/grafiken' existiert und beschreibbar ist
-- **JSON-Ladefehler**: Falls die JSON-Datei beschädigt ist, müssen Sie sie möglicherweise löschen und neu erstellen
-
-
+- **Installationsprobleme**: Stellen Sie sicher, dass Python 3.6+ installiert ist.
+- **Fehlende Diagramme**: Verzeichnis 'data/grafiken' muss existieren und beschreibbar sein.
+- **Dateifehler**: Bei JSON-Dateifehlern, löschen Sie bitte die 'data/studium_data.json' Datei und starten Sie anschließend neu.
