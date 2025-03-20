@@ -49,8 +49,10 @@ class Dashboard:
         Rückgabe:
             Der angegebene Fallback-Wert
         """
-        logger.error(f"Fehler bei {operation}: {error}", exc_info=True)
-        print(f"Fehler bei {operation}: {error}")
+        error_type = type(error).__name__
+        detail_msg = str(error)
+        logger.error(f"Fehler bei {operation} ({error_type}): {detail_msg}", exc_info=True)
+        print(f"Fehler bei {operation}: {detail_msg}")
         return fallback
 
     def initialisieren(self) -> bool:
@@ -292,8 +294,8 @@ class Dashboard:
                 if noten:
                     gewichtete_summe = sum(note * gewicht for note, gewicht in noten)
                     gesamt_gewicht = sum(gewicht for _, gewicht in noten)
-                    semester_noten[sem.nummer] = round(gewichtete_summe / gesamt_gewicht,
-                                                       2) if gesamt_gewicht > 0 else 0.0
+                    # Vermeidet Division durch Null
+                    semester_noten[sem.nummer] = round(gewichtete_summe / gesamt_gewicht, 2) if gesamt_gewicht > 0 else 0.0
                 else:
                     semester_noten[sem.nummer] = 0.0
 

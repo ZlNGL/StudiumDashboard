@@ -179,6 +179,52 @@ class DatenManager:
             print(f"Fehler beim CSV-Export: {e}")
             return False
 
+    def validate_csv_row(self, row: Dict[str, Any]) -> List[str]:
+        """
+        Validiert eine Zeile in der CSV-Datei.
+
+        Überprüft, ob alle erforderlichen Felder vorhanden sind und
+        ob die Werte gültig sind.
+
+        Parameter:
+            row: Eine Zeile aus der CSV-Datei als Dictionary
+
+        Rückgabe:
+            Eine Liste mit Fehlermeldungen, leer wenn keine Fehler gefunden wurden
+        """
+        issues = []
+
+        # Prüfe auf erforderliche Felder
+        if "Prüfungsart" not in row or not row.get("Prüfungsart"):
+            issues.append("Prüfungsart fehlt oder ist leer")
+
+        # Validiere Datum wenn vorhanden
+        if "Datum" in row and row.get("Datum") and row.get("Datum") != "N/A":
+            try:
+                date.fromisoformat(row["Datum"])
+            except ValueError:
+                issues.append(f"Ungültiges Datumsformat: {row['Datum']}")
+
+        # Validiere Notenwert
+        if "Note" in row and row.get("Note") and row.get("Note") != "N/A":
+            try:
+                note_val = float(row["Note"])
+                if note_val < 1.0 or note_val > 5.0:
+                    issues.append(f"Notenwert {note_val} außerhalb des gültigen Bereichs (1.0-5.0)")
+            except ValueError:
+                issues.append(f"Ungültiger Notenwert: {row['Note']}")
+
+        # Validiere Gewichtung
+        if "Gewichtung" in row and row.get("Gewichtung"):
+            try:
+                gewichtung = float(row["Gewichtung"])
+                if gewichtung <= 0:
+                    issues.append(f"Gewichtung muss größer als 0 sein: {gewichtung}")
+            except ValueError:
+                issues.append(f"Ungültige Gewichtung: {row['Gewichtung']}")
+
+        return issues
+
     def import_csv(self, student: Student, studiengang: Studiengang, import_pfad: str) -> bool:
         """
         Importiert Noten aus einer CSV-Datei.
@@ -186,7 +232,8 @@ class DatenManager:
         Diese Methode liest eine CSV-Datei mit Prüfungsdaten und fügt die
         entsprechenden Prüfungsleistungen zum Studenten und zu den passenden
         Modulen des Studiengangs hinzu. Die Methode wurde verbessert, um Modul-IDs
-        für eine bessere Zuordnung zu verwenden.
+        für eine bessere Zuordnung zu verwenden und enthält nun eine erweiterte
+        Validierung der Eingabedaten.
 
         Parameter:
             student: Das Student-Objekt, zu dem die Noten hinzugefügt werden sollen
@@ -212,18 +259,34 @@ class DatenManager:
                 reader = csv.reader(file)
                 header = next(reader, None)
                 # Überprüfe grundlegende Spalten
-                if not header or not any(col in header for col in ["Prüfungsart", "Note"]):
-                    logger.error(f"CSV-Datei hat nicht das erwartete Format.")
-                    print(f"CSV-Datei hat nicht das erwartete Format.")
+                required_columns = ["Prüfungsart", "Note"]
+                missing_columns = [col for col in required_columns if col not in header]
+
+                if not header or missing_columns:
+                    logger.error(f"CSV-Datei hat nicht das erwartete Format. Fehlende Spalten: {missing_columns}")
+                    print(f"CSV-Datei hat nicht das erwartete Format. Fehlende Spalten: {', '.join(missing_columns)}")
                     return False
 
             # Lese die CSV-Datei
             with open(import_pfad, 'r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
 
+                # Zähle Erfolge und Fehler
+                success_count = 0
+                error_count = 0
+
                 # Verarbeite jede Zeile der CSV-Datei
-                for row in reader:
+                for row_index, row in enumerate(reader, 1):
                     try:
+                        # Validiere die Zeile
+                        validation_issues = self.validate_csv_row(row)
+                        if validation_issues:
+                            error_msg = f"Validierungsfehler in Zeile {row_index}: {', '.join(validation_issues)}"
+                            logger.warning(error_msg)
+                            print(error_msg)
+                            error_count += 1
+                            continue  # Überspringe fehlerhafte Zeilen
+
                         # Ermittle das Modul (entweder über ID oder Name)
                         modul = None
                         modul_id = row.get("Modul_ID")
@@ -281,6 +344,7 @@ class DatenManager:
                             except ValueError:
                                 logger.warning(f"Ungültiger Notenwert: {note_wert}. Überspringe Note.")
                                 print(f"Ungültiger Notenwert: {note_wert}. Überspringe Note.")
+                                error_count += 1
                                 continue
 
                         # Füge zum Studenten hinzu
@@ -293,13 +357,23 @@ class DatenManager:
                             if pruefung.bestanden:
                                 student.update_ects_for_modul(modul, True)
 
+                        success_count += 1
+
                     except Exception as e:
-                        logger.error(f"Fehler beim Importieren einer Zeile: {e}", exc_info=True)
-                        print(f"Fehler beim Importieren einer Zeile: {e}")
+                        error_type = type(e).__name__
+                        error_count += 1
+                        logger.error(f"Fehler beim Importieren von Zeile {row_index} ({error_type}): {e}",
+                                     exc_info=True)
+                        print(f"Fehler beim Importieren von Zeile {row_index}: {e}")
                         continue  # Fahre mit der nächsten Zeile fort, auch wenn diese fehlschlägt
 
-            return True
+            # Protokolliere Importstatistik
+            logger.info(f"CSV-Import abgeschlossen: {success_count} Einträge erfolgreich, {error_count} Fehler")
+            print(f"CSV-Import abgeschlossen: {success_count} Einträge erfolgreich, {error_count} Fehler")
+
+            return success_count > 0 or error_count == 0
         except Exception as e:
-            logger.error(f"Fehler beim CSV-Import: {e}", exc_info=True)
+            error_type = type(e).__name__
+            logger.error(f"Fehler beim CSV-Import ({error_type}): {e}", exc_info=True)
             print(f"Fehler beim CSV-Import: {e}")
             return False

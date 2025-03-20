@@ -33,6 +33,7 @@ class Modul(BaseModel):
         self.ects = ects
         self.semesterZuordnung = semesterZuordnung
         self.pruefungsleistungen = []  # Liste von Pruefungsleistung-Objekten, initial leer
+        self.required_for_completion = []  # Liste von Prüfungsarten, die zum Bestehen erforderlich sind (leer = alle)
 
     def get_ects(self) -> int:
         """
@@ -57,8 +58,8 @@ class Modul(BaseModel):
         Überprüft, ob das Modul für einen bestimmten Studenten abgeschlossen ist.
 
         Ein Modul gilt als abgeschlossen, wenn mindestens eine der zugehörigen
-        Prüfungsleistungen als bestanden markiert ist. In der Praxis könnte
-        hier eine komplexere Logik implementiert werden.
+        Prüfungsleistungen als bestanden markiert ist. Falls eine Liste von
+        erforderlichen Prüfungsarten angegeben ist, müssen alle diese bestanden sein.
 
         Parameter:
             student: Das Student-Objekt, für das geprüft werden soll
@@ -66,7 +67,23 @@ class Modul(BaseModel):
         Rückgabe:
             True, wenn das Modul vom Studenten abgeschlossen wurde, False sonst
         """
-        # Einfache Implementierung: Prüfen, ob mindestens eine Prüfung bestanden ist
+        # Wenn keine Prüfungsleistungen vorhanden sind, ist das Modul nicht bestanden
+        if not self.pruefungsleistungen:
+            return False
+
+        # Wenn bestimmte Prüfungsarten erforderlich sind
+        if self.required_for_completion:
+            required_exams = [pl for pl in self.pruefungsleistungen
+                              if pl.art in self.required_for_completion]
+
+            # Wenn keine der erforderlichen Prüfungstypen vorhanden sind, verwende Standard-Logik
+            if not required_exams:
+                return any(pl.bestanden for pl in self.pruefungsleistungen if pl)
+
+            # Alle erforderlichen Prüfungen müssen bestanden sein
+            return all(pl.bestanden for pl in required_exams)
+
+        # Standardverhalten: Prüfe, ob mindestens eine Prüfung bestanden ist
         return any(pl.bestanden for pl in self.pruefungsleistungen if pl)
 
     def add_pruefungsleistung(self, pruefung: Pruefungsleistung) -> None:
@@ -124,7 +141,8 @@ class Modul(BaseModel):
             "beschreibung": self.beschreibung,
             "ects": self.ects,
             "semesterZuordnung": self.semesterZuordnung,
-            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen if pl]
+            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen if pl],
+            "required_for_completion": self.required_for_completion
         })
         return data
 
@@ -147,6 +165,7 @@ class Modul(BaseModel):
         modul.beschreibung = data.get("beschreibung", "")
         modul.ects = data.get("ects", 0)
         modul.semesterZuordnung = data.get("semesterZuordnung", 0)
+        modul.required_for_completion = data.get("required_for_completion", [])
 
         # Prüfungsleistungen hinzufügen
         from .pruefungsleistung import Pruefungsleistung

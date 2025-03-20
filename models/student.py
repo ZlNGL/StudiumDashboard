@@ -101,6 +101,7 @@ class Student(Person):
     def update_ects_for_modul(self, modul: Modul, bestanden: bool) -> None:
         """
         Aktualisiert die ECTS des Studenten basierend auf dem Bestehenstatus eines Moduls.
+        Verhindert das Doppelzählen von ECTS für ein Modul.
 
         Parameter:
             modul: Das Modul-Objekt
