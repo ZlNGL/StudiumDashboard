@@ -1,11 +1,11 @@
 # models/modul.py
 from typing import List, Dict, Any, Optional
 
-# Import wird durch relative Importe ersetzt
+from .base_model import BaseModel
 from .pruefungsleistung import Pruefungsleistung
 
 
-class Modul:
+class Modul(BaseModel):
     """
     Klasse zur Repräsentation eines Moduls in einem Studiengang.
 
@@ -26,6 +26,7 @@ class Modul:
             ects: ECTS-Punkte/Credits für dieses Modul
             semesterZuordnung: Semester, in dem das Modul typischerweise belegt wird
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.modulName = modulName
         self.modulID = modulID
         self.beschreibung = beschreibung
@@ -78,8 +79,12 @@ class Modul:
         Parameter:
             pruefung: Das Pruefungsleistung-Objekt, das hinzugefügt werden soll
         """
-        if pruefung:
-            self.pruefungsleistungen.append(pruefung)
+        if not isinstance(pruefung, Pruefungsleistung):
+            raise TypeError("pruefung muss vom Typ Pruefungsleistung sein")
+
+        # Setze die modul_id der Prüfungsleistung auf die ID dieses Moduls
+        pruefung.modul_id = self.id
+        self.pruefungsleistungen.append(pruefung)
 
     def get_current_grade(self) -> float:
         """
@@ -112,41 +117,41 @@ class Modul:
         Rückgabe:
             Ein Dictionary mit den Attributen des Moduls
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "modulName": self.modulName,
             "modulID": self.modulID,
             "beschreibung": self.beschreibung,
             "ects": self.ects,
             "semesterZuordnung": self.semesterZuordnung,
             "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen if pl]
-        }
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Modul':
-        """
-        Erstellt ein Modul-Objekt aus einem Dictionary.
+        # Erstelle Modul mit erforderlichen Parametern
+        temp_modulName = data.get("modulName", "Temporäres Modul")
+        temp_modulID = data.get("modulID", "TEMP")
 
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Moduldaten.
-
-        Parameter:
-            data: Ein Dictionary mit den Attributen eines Moduls
-
-        Rückgabe:
-            Ein neues Modul-Objekt, initialisiert mit den Daten aus dem Dictionary
-        """
         modul = cls(
-            modulName=data["modulName"],
-            modulID=data["modulID"],
-            beschreibung=data.get("beschreibung", ""),
-            ects=data.get("ects", 0),
-            semesterZuordnung=data.get("semesterZuordnung", 0)
+            modulName=temp_modulName,
+            modulID=temp_modulID
         )
 
-        # Da wir hier einen Import in einer Klassenmethode brauchen,
-        # müssen wir ihn hier platzieren, um zirkuläre Importe zu vermeiden
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            modul.id = data["id"]
+
+        # Restliche Attribute aktualisieren
+        modul.beschreibung = data.get("beschreibung", "")
+        modul.ects = data.get("ects", 0)
+        modul.semesterZuordnung = data.get("semesterZuordnung", 0)
+
+        # Prüfungsleistungen hinzufügen
         from .pruefungsleistung import Pruefungsleistung
         for pl_data in data.get("pruefungsleistungen", []):
-            modul.pruefungsleistungen.append(Pruefungsleistung.from_dict(pl_data))
+            pruefung = Pruefungsleistung.from_dict(pl_data)
+            modul.pruefungsleistungen.append(pruefung)
 
         return modul

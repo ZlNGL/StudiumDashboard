@@ -2,8 +2,9 @@
 from datetime import date
 from typing import Dict, Any
 
+from .base_model import BaseModel
 
-class Person:
+class Person(BaseModel):
     """
     Basisklasse zur Repräsentation einer Person.
     Diese Klasse ist als abstrakte Basisklasse implementiert, die erweitert werden kann,
@@ -21,6 +22,7 @@ class Person:
             geburtsdatum: Geburtsdatum als date-Objekt
             email: E-Mail-Adresse (optional, Standardwert ist ein leerer String)
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.vorname = vorname
         self.nachname = nachname
         self.geburtsdatum = geburtsdatum
@@ -70,12 +72,14 @@ class Person:
         Rückgabe:
             Ein Dictionary mit den Attributen der Person
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "vorname": self.vorname,
             "nachname": self.nachname,
             "geburtsdatum": self.geburtsdatum.isoformat(),  # ISO-Format für bessere Kompatibilität
             "email": self.email
-        }
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Person':
@@ -90,9 +94,9 @@ class Person:
         Rückgabe:
             Ein neues Person-Objekt, initialisiert mit den Daten aus dem Dictionary
         """
-        return cls(
-            vorname=data["vorname"],
-            nachname=data["nachname"],
-            geburtsdatum=date.fromisoformat(data["geburtsdatum"]),  # Konvertierung aus ISO-Format
-            email=data.get("email", "")  # Verwendet get(), um sicher auf optionale Werte zuzugreifen
-        )
+        person = super().from_dict(data)  # BaseModel from_dict aufrufen
+        person.vorname = data["vorname"]
+        person.nachname = data["nachname"]
+        person.geburtsdatum = date.fromisoformat(data["geburtsdatum"])  # Konvertierung aus ISO-Format
+        person.email = data.get("email", "")  # Verwendet get(), um sicher auf optionale Werte zuzugreifen
+        return person

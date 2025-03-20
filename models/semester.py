@@ -2,11 +2,11 @@
 from datetime import date
 from typing import List, Dict, Any, Optional
 
-# Import wird durch relative Importe ersetzt
+from .base_model import BaseModel
 from .modul import Modul
 
 
-class Semester:
+class Semester(BaseModel):
     """
     Klasse zur Repräsentation eines Semesters in einem Studiengang.
 
@@ -27,6 +27,7 @@ class Semester:
             recommendedECTS: Empfohlene ECTS-Punkte für dieses Semester (Standard: 30)
             status: Status des Semesters (z.B. "geplant", "aktiv", "abgeschlossen")
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.nummer = nummer
         self.startDatum = startDatum
         self.endDatum = endDatum
@@ -57,6 +58,9 @@ class Semester:
         Parameter:
             modul: Das Modul-Objekt, das diesem Semester hinzugefügt werden soll
         """
+        if not isinstance(modul, Modul):
+            raise TypeError("modul muss vom Typ Modul sein")
+
         self.module.append(modul)
 
     def is_active(self) -> bool:
@@ -97,7 +101,8 @@ class Semester:
         Rückgabe:
             Ein Dictionary mit den Attributen des Semesters und seiner Module
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "nummer": self.nummer,
             "startDatum": self.startDatum.isoformat() if self.startDatum else None,
             "endDatum": self.endDatum.isoformat() if self.endDatum else None,
@@ -105,34 +110,27 @@ class Semester:
             "status": self.status,
             "aktiv": self.aktiv,
             "module": [modul.to_dict() for modul in self.module]
-        }
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Semester':
-        """
-        Erstellt ein Semester-Objekt aus einem Dictionary.
+        # Erst mit der Semesternummer erstellen
+        temp_nummer = data.get("nummer", 1)
+        semester = cls(nummer=temp_nummer)
 
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Semesterdaten inklusive aller
-        zugehörigen Module.
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            semester.id = data["id"]
 
-        Parameter:
-            data: Ein Dictionary mit den Attributen eines Semesters
-
-        Rückgabe:
-            Ein neues Semester-Objekt, initialisiert mit den Daten aus dem Dictionary
-        """
-        semester = cls(
-            nummer=data["nummer"],
-            startDatum=date.fromisoformat(data["startDatum"]) if data.get("startDatum") else None,
-            endDatum=date.fromisoformat(data["endDatum"]) if data.get("endDatum") else None,
-            recommendedECTS=data.get("recommendedECTS", 30),
-            status=data.get("status", "geplant")
-        )
+        # Restliche Attribute setzen
+        semester.startDatum = date.fromisoformat(data["startDatum"]) if data.get("startDatum") else None
+        semester.endDatum = date.fromisoformat(data["endDatum"]) if data.get("endDatum") else None
+        semester.recommendedECTS = data.get("recommendedECTS", 30)
+        semester.status = data.get("status", "geplant")
         semester.aktiv = data.get("aktiv", False)
 
-        # Da wir hier einen Import in einer Klassenmethode brauchen,
-        # müssen wir ihn hier platzieren, um zirkuläre Importe zu vermeiden
+        # Module hinzufügen
         from .modul import Modul
         for modul_data in data.get("module", []):
             modul = Modul.from_dict(modul_data)

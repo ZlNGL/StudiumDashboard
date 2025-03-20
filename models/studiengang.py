@@ -1,12 +1,12 @@
 # models/studiengang.py
 from typing import List, Dict, Any, Optional, Tuple
 
-# Importe durch relative Importe ersetzen
+from .base_model import BaseModel
 from .semester import Semester
 from .modul import Modul
 
 
-class Studiengang:
+class Studiengang(BaseModel):
     """
     Klasse zur Repräsentation eines Studiengangs.
 
@@ -24,6 +24,7 @@ class Studiengang:
             gesamtECTS: Gesamtzahl der ECTS-Punkte, die für den Abschluss benötigt werden
                         (Standard: 180, typisch für Bachelor-Studiengänge)
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.name = name
         self.gesamtECTS = gesamtECTS
         self.semester = []  # Liste von Semester-Objekten, initial leer
@@ -55,6 +56,9 @@ class Studiengang:
         Parameter:
             semester: Das Semester-Objekt, das hinzugefügt werden soll
         """
+        if not isinstance(semester, Semester):
+            raise TypeError("semester muss vom Typ Semester sein")
+
         self.semester.append(semester)
 
     def get_all_module(self) -> List[Modul]:
@@ -116,14 +120,14 @@ class Studiengang:
         if not student:
             return result
 
-        # Zähle das Vorkommen jeder Note
         for modul in self.get_all_module():
-            if not modul or not hasattr(modul, 'pruefungsleistungen'):
+            if not modul:
                 continue
 
-            if student and student.hat_modul_bestanden(modul):
+            if student.hat_modul_bestanden(modul):
                 result["bestanden"].append(modul)
-            elif student and any(pl in student.pruefungsleistungen for pl in modul.pruefungsleistungen if pl):
+            elif any(pl.modul_id == modul.id for pl in student.pruefungsleistungen if
+                     hasattr(pl, 'modul_id') and pl.modul_id):
                 result["belegt"].append(modul)
             else:
                 result["offen"].append(modul)
@@ -143,6 +147,8 @@ class Studiengang:
         Rückgabe:
             Die Gesamtnote des Studenten
         """
+        if not student:
+            return 0.0
         return student.get_durchschnittnote()
 
     def to_dict(self) -> Dict[str, Any]:
@@ -155,34 +161,32 @@ class Studiengang:
         Rückgabe:
             Ein Dictionary mit den Attributen des Studiengangs und seiner Semester
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "name": self.name,
             "gesamtECTS": self.gesamtECTS,
             "semester": [sem.to_dict() for sem in self.semester]
-        }
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Studiengang':
         """
         Erstellt ein Studiengang-Objekt aus einem Dictionary.
-
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Studiengangsdaten inklusive aller
-        zugehörigen Semester und Module.
-
-        Parameter:
-            data: Ein Dictionary mit den Attributen eines Studiengangs
-
-        Rückgabe:
-            Ein neues Studiengang-Objekt, initialisiert mit den Daten aus dem Dictionary
         """
-        studiengang = cls(
-            name=data["name"],
-            gesamtECTS=data.get("gesamtECTS", 180)
-        )
+        # Erst ein vollständiges Objekt mit dem Namen erstellen
+        temp_name = data.get("name", "Temporärer Name")
+        studiengang = cls(name=temp_name)
 
-        # Da wir hier einen Import in einer Klassenmethode brauchen,
-        # müssen wir ihn hier platzieren, um zirkuläre Importe zu vermeiden
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            studiengang.id = data["id"]
+
+        # Attribute aktualisieren
+        studiengang.name = data.get("name", temp_name)
+        studiengang.gesamtECTS = data.get("gesamtECTS", 180)
+
+        # Semester hinzufügen
         from .semester import Semester
         for sem_data in data.get("semester", []):
             studiengang.add_semester(Semester.from_dict(sem_data))

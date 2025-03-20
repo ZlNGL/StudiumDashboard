@@ -2,10 +2,10 @@
 from datetime import date
 from typing import Dict, Any, Optional
 import traceback
+import logging
 
-
-# Import Dashboard (wird über controllers importiert, sobald verfügbar)
-# from controllers import Dashboard
+# Logger konfigurieren
+logger = logging.getLogger(__name__)
 
 
 class BenutzerInteraktion:
@@ -26,6 +26,33 @@ class BenutzerInteraktion:
             dashboard: Das Dashboard-Objekt, mit dem interagiert werden soll (optional)
         """
         self.dashboard = dashboard
+
+    def get_validated_date(self, prompt="Datum (TT.MM.JJJJ): ", allow_empty=True):
+        """
+        Fragt den Benutzer nach einem Datum und validiert die Eingabe.
+
+        Parameter:
+            prompt: Die Eingabeaufforderung
+            allow_empty: Ob eine leere Eingabe erlaubt ist
+
+        Rückgabe:
+            Ein date-Objekt oder None, wenn allow_empty True ist und keine Eingabe erfolgte
+        """
+        while True:
+            datum_str = input(prompt)
+            if not datum_str and allow_empty:
+                return None
+
+            try:
+                if "." in datum_str:  # Deutsches Format: TT.MM.JJJJ
+                    tag, monat, jahr = map(int, datum_str.split('.'))
+                    return date(jahr, monat, tag)
+                elif "-" in datum_str:  # ISO-Format: JJJJ-MM-TT
+                    return date.fromisoformat(datum_str)
+                else:
+                    print("Ungültiges Datumsformat. Bitte als TT.MM.JJJJ oder JJJJ-MM-TT eingeben.")
+            except ValueError as e:
+                print(f"Ungültiges Datum: {e}")
 
     def zeige_hauptmenue(self) -> None:
         """
@@ -67,8 +94,13 @@ class BenutzerInteraktion:
         print(f"Studiengang: {studiengang.name}")
         print(f"Student: {student.get_fullname()} (Matrikel-Nr: {student.matrikelNr})")
         print(f"Aktuelles Semester: {student.aktuelleSemesterZahl}")
-        print(f"ECTS-Fortschritt: {student.absolvierteECTS}/{studiengang.gesamtECTS} "
-              f"({(student.absolvierteECTS / studiengang.gesamtECTS * 100):.1f}%)")
+
+        # Berechne ECTS-Fortschritt sicher
+        ects_prozent = 0
+        if studiengang.gesamtECTS > 0:
+            ects_prozent = (student.absolvierteECTS / studiengang.gesamtECTS * 100)
+
+        print(f"ECTS-Fortschritt: {student.absolvierteECTS}/{studiengang.gesamtECTS} ({ects_prozent:.1f}%)")
         print(f"Aktueller Notendurchschnitt: {student.get_durchschnittnote():.2f}")
         print(f"Ziel-Notendurchschnitt: {student.zielNotendurchschnitt:.2f}")
         print("=" * 50)
@@ -216,36 +248,34 @@ class BenutzerInteraktion:
             pruefung_data = {}
             pruefung_data["art"] = input("Prüfungsart (Klausur, Hausarbeit, etc.): ")
 
-            # Erfasse optionales Datum mit verbesserter Fehlerbehandlung
-            datum_str = input("Datum (TT.MM.JJJJ, leer für heute): ")
-            if datum_str:
-                try:
-                    tag, monat, jahr = map(int, datum_str.split('.'))
-                    pruefung_data["datum"] = date(jahr, monat, tag)
-                except (ValueError, IndexError) as e:
-                    print(f"Ungültiges Datumsformat: {e}. Verwende heutiges Datum.")
-                    pruefung_data["datum"] = date.today()
-            else:
+            # Verbesserte Datumseingabe mit Validierung
+            pruefung_data["datum"] = self.get_validated_date("Datum (TT.MM.JJJJ, leer für heute): ")
+            if not pruefung_data["datum"]:
                 pruefung_data["datum"] = date.today()
 
             pruefung_data["beschreibung"] = input("Beschreibung: ")
             pruefung_data["typ"] = input("Notentyp (Klausur, Hausarbeit, etc.): ")
 
-            # Erfasse Note und konvertiere Komma zu Punkt für float-Parsing
-            wert_str = input("Note (z.B. 1.7): ")
-            try:
-                pruefung_data["wert"] = float(wert_str.replace(',', '.'))
-            except ValueError:
-                print("Ungültiger Notenwert. Bitte eine Zahl eingeben.")
-                return
+            # Erfasse Note mit Fehlerbehandlung
+            while True:
+                wert_str = input("Note (z.B. 1.7): ")
+                try:
+                    pruefung_data["wert"] = float(wert_str.replace(',', '.'))
+                    break
+                except ValueError:
+                    print("Ungültiger Notenwert. Bitte eine Zahl eingeben.")
 
-            # Erfasse optionale Gewichtung
-            gewichtung_str = input("Gewichtung (1.0 für normal): ")
-            try:
-                pruefung_data["gewichtung"] = float(gewichtung_str.replace(',', '.')) if gewichtung_str else 1.0
-            except ValueError:
-                print("Ungültige Gewichtung. Verwende Standardgewichtung 1.0.")
-                pruefung_data["gewichtung"] = 1.0
+            # Erfasse optionale Gewichtung mit Fehlerbehandlung
+            while True:
+                gewichtung_str = input("Gewichtung (1.0 für normal, leer für Standard): ")
+                if not gewichtung_str:
+                    pruefung_data["gewichtung"] = 1.0
+                    break
+                try:
+                    pruefung_data["gewichtung"] = float(gewichtung_str.replace(',', '.'))
+                    break
+                except ValueError:
+                    print("Ungültige Gewichtung. Bitte eine Zahl eingeben oder leer lassen.")
 
             # Speichere die Note
             if self.dashboard.erfasse_note(modul.modulName, pruefung_data):
@@ -253,6 +283,7 @@ class BenutzerInteraktion:
             else:
                 print("Fehler beim Erfassen der Note.")
         except Exception as e:
+            logger.error(f"Fehler bei der Noteneingabe: {e}", exc_info=True)
             print(f"Fehler bei der Eingabe: {e}")
 
     def erfasse_modul(self) -> None:
@@ -277,13 +308,29 @@ class BenutzerInteraktion:
             modul_data["id"] = input("Modul-ID (leer für automatisch): ")
             modul_data["beschreibung"] = input("Beschreibung: ")
 
-            # Erfasse ECTS-Punkte
-            ects_str = input("ECTS (Standard: 5): ")
-            modul_data["ects"] = int(ects_str) if ects_str else 5
+            # Erfasse ECTS-Punkte mit Fehlerbehandlung
+            while True:
+                ects_str = input("ECTS (Standard: 5): ")
+                if not ects_str:
+                    modul_data["ects"] = 5
+                    break
+                try:
+                    modul_data["ects"] = int(ects_str)
+                    break
+                except ValueError:
+                    print("Ungültige ECTS-Punktzahl. Bitte eine ganze Zahl eingeben oder leer lassen.")
 
-            # Erfasse Semester
-            semester_str = input("Semester (1, 2, etc.): ")
-            semester = int(semester_str) if semester_str else 1
+            # Erfasse Semester mit Fehlerbehandlung
+            while True:
+                semester_str = input("Semester (1, 2, etc.): ")
+                if not semester_str:
+                    semester = 1
+                    break
+                try:
+                    semester = int(semester_str)
+                    break
+                except ValueError:
+                    print("Ungültige Semesterzahl. Bitte eine ganze Zahl eingeben oder leer lassen.")
 
             # Speichere das Modul
             if self.dashboard.erfasse_modul(semester, modul_data):
@@ -291,6 +338,7 @@ class BenutzerInteraktion:
             else:
                 print("Fehler beim Erfassen des Moduls.")
         except Exception as e:
+            logger.error(f"Fehler bei der Moduleingabe: {e}", exc_info=True)
             print(f"Fehler bei der Eingabe: {e}")
 
     def bearbeite_ziele(self) -> None:
@@ -313,9 +361,14 @@ class BenutzerInteraktion:
         print(f"Aktueller Ziel-Notendurchschnitt: {current:.2f}")
 
         try:
-            # Erfasse neuen Zielwert
-            ziel_str = input("Neuer Ziel-Notendurchschnitt: ")
-            ziel = float(ziel_str.replace(',', '.'))  # Erlaube Eingabe mit Komma oder Punkt
+            # Erfasse neuen Zielwert mit Fehlerbehandlung
+            while True:
+                ziel_str = input("Neuer Ziel-Notendurchschnitt: ")
+                try:
+                    ziel = float(ziel_str.replace(',', '.'))  # Erlaube Eingabe mit Komma oder Punkt
+                    break
+                except ValueError:
+                    print("Ungültiger Notenwert. Bitte eine Zahl eingeben.")
 
             # Speichere den neuen Zielwert
             if self.dashboard.bearbeite_ziele(ziel):
@@ -323,6 +376,7 @@ class BenutzerInteraktion:
             else:
                 print("Fehler beim Aktualisieren des Ziels.")
         except Exception as e:
+            logger.error(f"Fehler bei der Zielbearbeitung: {e}", exc_info=True)
             print(f"Fehler bei der Eingabe: {e}")
 
     def exportiere_daten(self) -> None:
@@ -449,8 +503,8 @@ class BenutzerInteraktion:
                 print("Keine Semesterdurchschnittsdaten verfügbar.")
 
         except Exception as e:
+            logger.error(f"Fehler beim Erstellen der Grafiken: {e}", exc_info=True)
             print(f"Fehler beim Erstellen der Grafiken: {e}")
-            traceback.print_exc()  # Gibt den vollständigen Stacktrace für bessere Fehlerbehebung aus
 
     def create_new_student_data(self) -> Dict[str, Any]:
         """
@@ -470,28 +524,25 @@ class BenutzerInteraktion:
         student_data["vorname"] = input("Vorname: ")
         student_data["nachname"] = input("Nachname: ")
 
-        # Erfasse Geburtsdatum mit verbesserter Fehlerbehandlung
-        geburtsdatum_str = input("Geburtsdatum (TT.MM.JJJJ, leer für heute): ")
-        if geburtsdatum_str:
-            try:
-                tag, monat, jahr = map(int, geburtsdatum_str.split('.'))
-                student_data["geburtsdatum"] = date(jahr, monat, tag)
-            except (ValueError, IndexError) as e:
-                print(f"Ungültiges Datumsformat: {e}. Verwende heutiges Datum.")
-                student_data["geburtsdatum"] = date.today()
-        else:
+        # Verbesserte Datumseingabe mit Validierung
+        student_data["geburtsdatum"] = self.get_validated_date("Geburtsdatum (TT.MM.JJJJ, leer für heute): ")
+        if not student_data["geburtsdatum"]:
             student_data["geburtsdatum"] = date.today()
 
         student_data["matrikelNr"] = input("Matrikel-Nr: ")
         student_data["email"] = input("E-Mail: ")
 
-        # Erfasse Ziel-Notendurchschnitt mit verbesserter Fehlerbehandlung
-        ziel_str = input("Ziel-Notendurchschnitt (Standard: 2.0): ")
-        try:
-            student_data["zielNotendurchschnitt"] = float(ziel_str.replace(',', '.')) if ziel_str else 2.0
-        except ValueError:
-            print("Ungültiger Ziel-Notendurchschnitt. Verwende Standardwert 2.0.")
-            student_data["zielNotendurchschnitt"] = 2.0
+        # Erfasse Ziel-Notendurchschnitt mit Fehlerbehandlung
+        while True:
+            ziel_str = input("Ziel-Notendurchschnitt (Standard: 2.0): ")
+            if not ziel_str:
+                student_data["zielNotendurchschnitt"] = 2.0
+                break
+            try:
+                student_data["zielNotendurchschnitt"] = float(ziel_str.replace(',', '.'))
+                break
+            except ValueError:
+                print("Ungültiger Ziel-Notendurchschnitt. Bitte eine Zahl eingeben oder leer lassen.")
 
         return student_data
 
@@ -512,8 +563,16 @@ class BenutzerInteraktion:
         studiengang_data = {}
         studiengang_data["name"] = input("Name des Studiengangs: ")
 
-        # Erfasse Gesamt-ECTS
-        gesamtECTS_str = input("Gesamte ECTS (Standard: 180): ")
-        studiengang_data["gesamtECTS"] = int(gesamtECTS_str) if gesamtECTS_str else 180
+        # Erfasse Gesamt-ECTS mit Fehlerbehandlung
+        while True:
+            gesamtECTS_str = input("Gesamte ECTS (Standard: 180): ")
+            if not gesamtECTS_str:
+                studiengang_data["gesamtECTS"] = 180
+                break
+            try:
+                studiengang_data["gesamtECTS"] = int(gesamtECTS_str)
+                break
+            except ValueError:
+                print("Ungültige ECTS-Punktzahl. Bitte eine ganze Zahl eingeben oder leer lassen.")
 
         return studiengang_data

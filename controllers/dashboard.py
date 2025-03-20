@@ -1,4 +1,5 @@
 # controllers/dashboard.py
+import logging
 from datetime import date, timedelta
 from typing import List, Dict, Optional, Tuple, Set, Union, Any
 
@@ -6,6 +7,9 @@ from typing import List, Dict, Optional, Tuple, Set, Union, Any
 from models import Student, Studiengang, Semester, Modul, Pruefungsleistung, Note
 # Import für DatenManager
 from .datenmanager import DatenManager
+
+# Logger konfigurieren
+logger = logging.getLogger(__name__)
 
 
 class Dashboard:
@@ -45,8 +49,8 @@ class Dashboard:
         Rückgabe:
             Der angegebene Fallback-Wert
         """
+        logger.error(f"Fehler bei {operation}: {error}", exc_info=True)
         print(f"Fehler bei {operation}: {error}")
-        # In einer produktiven Umgebung würde hier ein Logger verwendet
         return fallback
 
     def initialisieren(self) -> bool:
@@ -68,9 +72,32 @@ class Dashboard:
             if not (self.studiengang and self.student):
                 return False
 
+            # Initialisiere die bestandenen Module-IDs aus den geladenen Daten
+            self._aktualisiere_bestandene_module()
+
             return True
         except Exception as e:
             return self._handle_error("Initialisierung des Dashboards", e, False)
+
+    def _aktualisiere_bestandene_module(self):
+        """
+        Aktualisiert das Set der bestandenen Module basierend auf den Prüfungsleistungen.
+
+        Diese Methode durchläuft alle Module und prüft, ob sie bestanden wurden,
+        um sicherzustellen, dass die ECTS-Zählung korrekt ist.
+        """
+        if not (self.studiengang and self.student):
+            return
+
+        # Leere das Set der bestandenen Module
+        self.student._bestandene_module_ids = set()
+        self.student.absolvierteECTS = 0
+
+        # Durchlaufe alle Module und aktualisiere den Status
+        for modul in self.studiengang.get_all_module():
+            if modul.is_complete_for_student(self.student):
+                self.student._bestandene_module_ids.add(modul.id)
+                self.student.absolvierteECTS += modul.ects
 
     def create_new_data(self, student_data: Dict[str, Any], studiengang_data: Dict[str, Any]) -> bool:
         """
@@ -119,6 +146,7 @@ class Dashboard:
             True, wenn die Aktualisierung erfolgreich war, False sonst
         """
         if not (self.studiengang and self.student):
+            logger.warning("Keine Daten zum Aktualisieren vorhanden.")
             print("Keine Daten zum Aktualisieren vorhanden.")
             return False
 
@@ -193,7 +221,7 @@ class Dashboard:
 
             # Zähle das Vorkommen jeder Note
             for pruefung in pruefungen:
-                if pruefung.note:
+                if pruefung.note and pruefung.bestanden:
                     note = str(pruefung.note.wert)
                     verteilung[note] = verteilung.get(note, 0) + 1
 
@@ -298,6 +326,7 @@ class Dashboard:
                 break
 
         if not target_modul:
+            logger.warning(f"Modul '{modul_name}' nicht gefunden.")
             print(f"Modul '{modul_name}' nicht gefunden.")
             return False
 
@@ -323,9 +352,9 @@ class Dashboard:
             target_modul.add_pruefungsleistung(pruefung)
             self.student.add_pruefungsleistung(pruefung)
 
-            # Aktualisiere ECTS, wenn bestanden
+            # Wenn die Prüfung bestanden ist, aktualisiere ECTS mit der neuen Methode
             if pruefung.bestanden:
-                self.student.absolvierteECTS += target_modul.ects
+                self.student.update_ects_for_modul(target_modul, True)
 
             # Speichere Änderungen
             return self.aktualisieren()
@@ -343,6 +372,7 @@ class Dashboard:
             True, wenn das Speichern erfolgreich war, False sonst
         """
         if not (self.studiengang and self.student):
+            logger.warning("Keine Daten zum Speichern vorhanden.")
             print("Keine Daten zum Speichern vorhanden.")
             return False
 
@@ -370,6 +400,7 @@ class Dashboard:
             # Finde oder erstelle das Semester
             semester = self.studiengang.get_semester(semester_nummer)
             if not semester:
+                logger.info(f"Semester {semester_nummer} nicht gefunden. Erstelle neu.")
                 print(f"Semester {semester_nummer} nicht gefunden. Erstelle neu.")
                 semester = Semester(nummer=semester_nummer)
                 self.studiengang.add_semester(semester)
@@ -430,7 +461,7 @@ class Dashboard:
             return False
 
         try:
-            return self.daten_manager.export_csv(self.student, export_pfad)
+            return self.daten_manager.export_csv(self.student, self.studiengang, export_pfad)
         except Exception as e:
             return self._handle_error("Exportieren der Daten", e, False)
 
@@ -451,6 +482,10 @@ class Dashboard:
             return False
 
         try:
-            return self.daten_manager.import_csv(self.student, self.studiengang, import_pfad)
+            result = self.daten_manager.import_csv(self.student, self.studiengang, import_pfad)
+            if result:
+                # Aktualisiere die bestandenen Module nach dem Import
+                self._aktualisiere_bestandene_module()
+            return result
         except Exception as e:
             return self._handle_error("Importieren der Daten", e, False)

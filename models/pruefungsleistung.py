@@ -2,11 +2,11 @@
 from datetime import date
 from typing import Dict, Any, Optional
 
-# Import wird durch relative Importe ersetzt
+from .base_model import BaseModel
 from .note import Note
 
 
-class Pruefungsleistung:
+class Pruefungsleistung(BaseModel):
     """
     Klasse zur Repräsentation einer Prüfungsleistung.
 
@@ -29,6 +29,7 @@ class Pruefungsleistung:
             versuche: Anzahl der bisherigen Versuche (Standard: 1)
             anmerkung: Zusätzliche Anmerkungen zur Prüfung
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.art = art
         self.datum = datum if datum else date.today()  # Wenn kein Datum angegeben, heutiges Datum verwenden
         self.beschreibung = beschreibung
@@ -37,6 +38,7 @@ class Pruefungsleistung:
         self.anmerkung = anmerkung
         self.note = None  # Referenz auf ein Note-Objekt, initial None (keine Note vorhanden)
         self.bestanden = False  # Initial als nicht bestanden markiert
+        self.modul_id = None  # ID des zugehörigen Moduls, für bessere Verknüpfung
 
     def set_note(self, note: Note) -> None:
         """
@@ -48,6 +50,9 @@ class Pruefungsleistung:
         Parameter:
             note: Das Note-Objekt, das die Bewertung für diese Prüfung repräsentiert
         """
+        if not isinstance(note, Note):
+            raise TypeError("note muss vom Typ Note sein")
+
         self.note = note
         self.bestanden = note.is_passed() if note else False  # Bestehens-Status aus der Note ableiten
 
@@ -69,7 +74,8 @@ class Pruefungsleistung:
             "versuche": self.versuche,
             "anmerkung": self.anmerkung,
             "note": self.note.wert if self.note else None,
-            "bestanden": self.bestanden
+            "bestanden": self.bestanden,
+            "modul_id": self.modul_id
         }
 
     def get_deadline_in_days(self) -> int:
@@ -119,7 +125,8 @@ class Pruefungsleistung:
         Rückgabe:
             Ein Dictionary mit den Attributen der Prüfungsleistung
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "art": self.art,
             "datum": self.datum.isoformat() if self.datum else None,
             "beschreibung": self.beschreibung,
@@ -127,32 +134,34 @@ class Pruefungsleistung:
             "versuche": self.versuche,
             "anmerkung": self.anmerkung,
             "note": self.note.to_dict() if self.note else None,
-            "bestanden": self.bestanden
-        }
+            "bestanden": self.bestanden,
+            "modul_id": self.modul_id
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Pruefungsleistung':
-        """
-        Erstellt ein Pruefungsleistung-Objekt aus einem Dictionary.
+        # Erstelle Prüfungsleistung mit erforderlichem Parameter
+        temp_art = data.get("art", "Unbekannt")
 
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Prüfungsdaten.
+        pruefung = cls(art=temp_art)
 
-        Parameter:
-            data: Ein Dictionary mit den Attributen einer Prüfungsleistung
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            pruefung.id = data["id"]
 
-        Rückgabe:
-            Ein neues Pruefungsleistung-Objekt, initialisiert mit den Daten aus dem Dictionary
-        """
-        pruefung = cls(
-            art=data["art"],
-            datum=date.fromisoformat(data["datum"]) if data.get("datum") else None,
-            beschreibung=data.get("beschreibung", ""),
-            deadline=date.fromisoformat(data["deadline"]) if data.get("deadline") else None,
-            versuche=data.get("versuche", 1),
-            anmerkung=data.get("anmerkung", "")
-        )
+        # Restliche Attribute setzen
+        pruefung.datum = date.fromisoformat(data["datum"]) if data.get("datum") else None
+        pruefung.beschreibung = data.get("beschreibung", "")
+        pruefung.deadline = date.fromisoformat(data["deadline"]) if data.get("deadline") else None
+        pruefung.versuche = data.get("versuche", 1)
+        pruefung.anmerkung = data.get("anmerkung", "")
+        pruefung.modul_id = data.get("modul_id")
+
+        # Note hinzufügen, falls vorhanden
         if data.get("note"):
+            from .note import Note
             pruefung.note = Note.from_dict(data["note"])
             pruefung.bestanden = data.get("bestanden", False)
+
         return pruefung

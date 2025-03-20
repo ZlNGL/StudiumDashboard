@@ -2,7 +2,7 @@
 from datetime import date
 from typing import List, Dict, Any, Optional, Tuple
 
-# Importe durch relative Importe ersetzen
+from .base_model import BaseModel
 from .person import Person
 from .pruefungsleistung import Pruefungsleistung
 from .modul import Modul
@@ -46,6 +46,7 @@ class Student(Person):
         self.fokus = fokus
         self.aktuelleSemesterZahl = aktuelleSemesterZahl
         self.pruefungsleistungen = []  # Liste aller Prüfungsleistungen, initial leer
+        self._bestandene_module_ids = set()  # Set zur Verfolgung bestandener Module-IDs
 
     def get_durchschnittnote(self) -> float:
         """
@@ -92,16 +93,33 @@ class Student(Person):
         Parameter:
             pruefung: Das Pruefungsleistung-Objekt, das hinzugefügt werden soll
         """
+        if not isinstance(pruefung, Pruefungsleistung):
+            raise TypeError("pruefung muss vom Typ Pruefungsleistung sein")
+
         self.pruefungsleistungen.append(pruefung)
 
-        # ECTS aktualisieren, wenn die Prüfung bestanden ist (vereinfachte Logik)
-        # In einer vollständigen Implementierung würde hier das zugehörige Modul
-        # identifiziert und dessen ECTS zum Gesamtfortschritt addiert werden
-        if pruefung.bestanden:
-            # Ein Modul für diese Prüfung finden und seine ECTS hinzufügen
-            # Dies ist ein vereinfachter Ansatz; die eigentliche Implementierung
-            # müsste die Zuordnung zwischen Prüfungen und Modulen verfolgen
-            pass
+    def update_ects_for_modul(self, modul: Modul, bestanden: bool) -> None:
+        """
+        Aktualisiert die ECTS des Studenten basierend auf dem Bestehenstatus eines Moduls.
+
+        Parameter:
+            modul: Das Modul-Objekt
+            bestanden: Ob das Modul jetzt bestanden ist
+        """
+        if not modul:
+            return
+
+        # Modul als bestanden markieren oder Bestehen aufheben
+        if bestanden:
+            # Modul wurde bestanden - Prüfen, ob es bereits als bestanden markiert war
+            if modul.id not in self._bestandene_module_ids:
+                self._bestandene_module_ids.add(modul.id)
+                self.absolvierteECTS += modul.ects
+        else:
+            # Modul ist nicht bestanden - Prüfen, ob es zuvor als bestanden markiert war
+            if modul.id in self._bestandene_module_ids:
+                self._bestandene_module_ids.remove(modul.id)
+                self.absolvierteECTS -= modul.ects
 
     def get_ects_fortschritt(self) -> int:
         """
@@ -118,8 +136,8 @@ class Student(Person):
         """
         Überprüft, ob der Student ein bestimmtes Modul bestanden hat.
 
-        Diese Methode delegiert die Überprüfung an die is_complete_for_student-Methode
-        des Moduls, da diese die spezifischen Regeln für den Abschluss enthält.
+        Diese Methode prüft, ob die modul_id im Set der bestandenen Module enthalten ist
+        oder delegiert die Überprüfung an die is_complete_for_student-Methode des Moduls.
 
         Parameter:
             modul: Das Modul-Objekt, das überprüft werden soll
@@ -127,6 +145,8 @@ class Student(Person):
         Rückgabe:
             True, wenn das Modul vom Studenten bestanden wurde, False sonst
         """
+        if modul.id in self._bestandene_module_ids:
+            return True
         return modul.is_complete_for_student(self)
 
     def get_ects_needed(self) -> int:
@@ -162,43 +182,44 @@ class Student(Person):
             "absolvierteECTS": self.absolvierteECTS,
             "fokus": self.fokus,
             "aktuelleSemesterZahl": self.aktuelleSemesterZahl,
-            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen]
+            "pruefungsleistungen": [pl.to_dict() for pl in self.pruefungsleistungen],
+            "_bestandene_module_ids": list(self._bestandene_module_ids)
         })
         return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Student':
-        """
-        Erstellt ein Student-Objekt aus einem Dictionary.
+        # Erstelle mit erforderlichen Parametern
+        temp_vorname = data.get("vorname", "Temporär")
+        temp_nachname = data.get("nachname", "Student")
+        temp_geburtsdatum = date.fromisoformat(data.get("geburtsdatum", date.today().isoformat()))
+        temp_matrikelNr = data.get("matrikelNr", "000000")
 
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Studentendaten inklusive aller
-        zugehörigen Prüfungsleistungen.
-
-        Parameter:
-            data: Ein Dictionary mit den Attributen eines Studenten
-
-        Rückgabe:
-            Ein neues Student-Objekt, initialisiert mit den Daten aus dem Dictionary
-        """
         student = cls(
-            vorname=data["vorname"],
-            nachname=data["nachname"],
-            geburtsdatum=date.fromisoformat(data["geburtsdatum"]),
-            matrikelNr=data["matrikelNr"],
-            email=data.get("email", ""),
-            immatrikulationsdatum=date.fromisoformat(data["immatrikulationsdatum"]) if data.get(
-                "immatrikulationsdatum") else None,
-            zielNotendurchschnitt=data.get("zielNotendurchschnitt", 2.0),
-            absolvierteECTS=data.get("absolvierteECTS", 0),
-            fokus=data.get("fokus", ""),
-            aktuelleSemesterZahl=data.get("aktuelleSemesterZahl", 1)
+            vorname=temp_vorname,
+            nachname=temp_nachname,
+            geburtsdatum=temp_geburtsdatum,
+            matrikelNr=temp_matrikelNr
         )
 
-        # Da wir hier einen Import in einer Klassenmethode brauchen,
-        # müssen wir ihn hier platzieren, um zirkuläre Importe zu vermeiden
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            student.id = data["id"]
+
+        # Restliche Attribute aktualisieren
+        student.email = data.get("email", "")
+        student.immatrikulationsdatum = date.fromisoformat(
+            data["immatrikulationsdatum"]) if "immatrikulationsdatum" in data else date.today()
+        student.zielNotendurchschnitt = data.get("zielNotendurchschnitt", 2.0)
+        student.absolvierteECTS = data.get("absolvierteECTS", 0)
+        student.fokus = data.get("fokus", "")
+        student.aktuelleSemesterZahl = data.get("aktuelleSemesterZahl", 1)
+        student._bestandene_module_ids = set(data.get("_bestandene_module_ids", []))
+
+        # Prüfungsleistungen hinzufügen
         from .pruefungsleistung import Pruefungsleistung
         for pl_data in data.get("pruefungsleistungen", []):
-            student.pruefungsleistungen.append(Pruefungsleistung.from_dict(pl_data))
+            pruefung = Pruefungsleistung.from_dict(pl_data)
+            student.pruefungsleistungen.append(pruefung)
 
         return student

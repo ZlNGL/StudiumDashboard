@@ -2,8 +2,9 @@
 from datetime import date
 from typing import Dict, Any
 
+from .base_model import BaseModel
 
-class Note:
+class Note(BaseModel):
     """
     Klasse zur Repräsentation einer Note.
 
@@ -25,6 +26,7 @@ class Note:
             kommentar: Zusätzlicher Kommentar zur Note
             punkte: Erreichte Punktzahl (für alternative Bewertungssysteme)
         """
+        super().__init__()  # BaseModel Initialisierung für ID
         self.typ = typ
         self.wert = wert
         self.gewichtung = gewichtung
@@ -76,33 +78,36 @@ class Note:
         Rückgabe:
             Ein Dictionary mit den Attributen der Note
         """
-        return {
+        data = super().to_dict()  # BaseModel to_dict aufrufen
+        data.update({
             "typ": self.typ,
             "wert": self.wert,
             "gewichtung": self.gewichtung,
             "datum": self.datum.isoformat(),  # ISO-Format für bessere Kompatibilität
             "kommentar": self.kommentar,
             "punkte": self.punkte
-        }
+        })
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Note':
-        """
-        Erstellt ein Note-Objekt aus einem Dictionary.
-        Diese Klassenmethode ist das Gegenstück zu to_dict() und ermöglicht die
-        Deserialisierung von gespeicherten Notendaten.
+        # Erstelle Note mit erforderlichen Parametern
+        temp_typ = data.get("typ", "Unbekannt")
+        temp_wert = data.get("wert", 4.0)
 
-        Parameter:
-            data: Ein Dictionary mit den Attributen einer Note
-
-        Rückgabe:
-            Ein neues Note-Objekt, initialisiert mit den Daten aus dem Dictionary
-        """
-        return cls(
-            typ=data["typ"],
-            wert=data["wert"],
-            gewichtung=data.get("gewichtung", 1.0),  # Standardwert für Gewichtung, falls nicht angegeben
-            datum=date.fromisoformat(data["datum"]) if "datum" in data else None,
-            kommentar=data.get("kommentar", ""),  # Standardwert für Kommentar, falls nicht angegeben
-            punkte=data.get("punkte", 0)  # Standardwert für Punkte, falls nicht angegeben
+        note = cls(
+            typ=temp_typ,
+            wert=temp_wert
         )
+
+        # ID aus BaseModel-Daten setzen
+        if "id" in data:
+            note.id = data["id"]
+
+        # Restliche Attribute aktualisieren
+        note.gewichtung = data.get("gewichtung", 1.0)
+        note.datum = date.fromisoformat(data["datum"]) if "datum" in data else date.today()
+        note.kommentar = data.get("kommentar", "")
+        note.punkte = data.get("punkte", 0)
+
+        return note
