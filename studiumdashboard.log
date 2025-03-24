@@ -1,0 +1,23 @@
+2025-03-24 12:35:04,240 - __main__ - INFO - Anwendung gestartet
+2025-03-24 12:45:40,107 - __main__ - INFO - Anwendung wird beendet.
+2025-03-24 12:45:49,978 - __main__ - INFO - Anwendung gestartet
+2025-03-24 12:45:49,979 - controllers.datenmanager - ERROR - Fehler beim Parsen der JSON-Datei: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/christoph/PycharmProjects/StudiumDashboard/controllers/datenmanager.py", line 94, in laden
+    data = json.load(file)
+           ^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2025-03-24 12:45:49,988 - __main__ - INFO - Keine vorhandenen Daten gefunden.
+2025-03-24 12:45:54,064 - __main__ - INFO - Beispieldaten erfolgreich erstellt.
+2025-03-24 12:46:02,822 - __main__ - INFO - Anwendung wird beendet.

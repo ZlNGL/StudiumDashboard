@@ -1,11 +1,11 @@
 {
     "studiengang": {
-        "id": "9a742673-56b9-4512-a60e-b9c4de3e211e",
+        "id": "2876c210-57a3-4927-947d-5502c530c340",
         "name": "Informatik Bachelor",
         "gesamtECTS": 180,
         "semester": [
             {
-                "id": "f2c49002-1cb8-4419-b8f9-6864b297d0dd",
+                "id": "f24b99ad-5fc4-485a-94c3-7a5b39c4d697",
                 "nummer": 1,
                 "startDatum": "2022-04-01",
                 "endDatum": "2022-09-30",
@@ -14,7 +14,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "2d7129dd-091a-4cdb-b1b0-1e3ba0dacd85",
+                        "id": "d449528b-3c8a-493d-add1-a457a96ee95e",
                         "modulName": "Modul 1.1",
                         "modulID": "M11",
                         "beschreibung": "Beschreibung für Modul 1.1",
@@ -22,7 +22,7 @@
                         "semesterZuordnung": 1,
                         "pruefungsleistungen": [
                             {
-                                "id": "272f60aa-33e7-47d7-a721-e9521a28acbf",
+                                "id": "247609bf-1494-4606-913f-d8ab8e4ade1c",
                                 "art": "Klausur",
                                 "datum": "2022-07-15",
                                 "beschreibung": "Prüfung für Modul 1.1",
@@ -30,7 +30,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "0c6efedb-00e7-40ad-ad1f-09b2838d2724",
+                                    "id": "fb2b94f3-88a7-49ee-9c6b-3b66dce9812b",
                                     "typ": "Note",
                                     "wert": 1.3,
                                     "gewichtung": 1.0,
@@ -39,13 +39,13 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "2d7129dd-091a-4cdb-b1b0-1e3ba0dacd85"
+                                "modul_id": "d449528b-3c8a-493d-add1-a457a96ee95e"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "12723710-eda9-48c3-97e6-a6df1a66fe4f",
+                        "id": "40999e48-991b-4b97-8c92-d9a8c7656c78",
                         "modulName": "Modul 1.2",
                         "modulID": "M12",
                         "beschreibung": "Beschreibung für Modul 1.2",
@@ -53,7 +53,7 @@
                         "semesterZuordnung": 1,
                         "pruefungsleistungen": [
                             {
-                                "id": "8d9f08b0-23a4-4391-b61f-4ef1f60521b2",
+                                "id": "621bbf36-39ad-490b-83c8-7fee6b24af7d",
                                 "art": "Hausarbeit",
                                 "datum": "2022-07-15",
                                 "beschreibung": "Prüfung für Modul 1.2",
@@ -61,7 +61,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "56f82562-b9c8-40af-b668-8efd4b7ddbef",
+                                    "id": "1a5ab10b-1bcc-4c88-adce-dfa8dcd915aa",
                                     "typ": "Note",
                                     "wert": 2.0,
                                     "gewichtung": 1.0,
@@ -70,33 +70,13 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "12723710-eda9-48c3-97e6-a6df1a66fe4f"
-                            },
-                            {
-                                "id": "ee097ebe-cbf4-412b-a89b-7428affcbde2",
-                                "art": "Klausur",
-                                "datum": "2025-03-05",
-                                "beschreibung": "Test-Klausur für Mathematik",
-                                "deadline": null,
-                                "versuche": 1,
-                                "anmerkung": "",
-                                "note": {
-                                    "id": "3057dbe4-4db3-42f0-9b82-8b2d62c32142",
-                                    "typ": "Klausur",
-                                    "wert": 3.2,
-                                    "gewichtung": 1.0,
-                                    "datum": "2025-03-24",
-                                    "kommentar": "",
-                                    "punkte": 0
-                                },
-                                "bestanden": true,
-                                "modul_id": "12723710-eda9-48c3-97e6-a6df1a66fe4f"
+                                "modul_id": "40999e48-991b-4b97-8c92-d9a8c7656c78"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "79cb9533-b0f1-4d1e-8914-0f8e1abac64e",
+                        "id": "bb996d4f-3b68-4917-85e4-ae35056cf209",
                         "modulName": "Modul 1.3",
                         "modulID": "M13",
                         "beschreibung": "Beschreibung für Modul 1.3",
@@ -104,7 +84,7 @@
                         "semesterZuordnung": 1,
                         "pruefungsleistungen": [
                             {
-                                "id": "2ab0c7f2-1d46-4fda-b52b-7ab0d88b8c99",
+                                "id": "460eb1e0-96a1-4e23-a919-ef0856da77b2",
                                 "art": "Klausur",
                                 "datum": "2022-07-15",
                                 "beschreibung": "Prüfung für Modul 1.3",
@@ -112,7 +92,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "aff5fb6c-ac15-457c-8062-fbcabe86f596",
+                                    "id": "7238ecbe-23ed-4412-a760-2113dc1ec375",
                                     "typ": "Note",
                                     "wert": 1.7,
                                     "gewichtung": 1.0,
@@ -121,7 +101,7 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "79cb9533-b0f1-4d1e-8914-0f8e1abac64e"
+                                "modul_id": "bb996d4f-3b68-4917-85e4-ae35056cf209"
                             }
                         ],
                         "required_for_completion": []
@@ -129,7 +109,7 @@
                 ]
             },
             {
-                "id": "9315aac3-8fad-40f4-b1eb-9b4d108032b9",
+                "id": "d4c9892a-1468-4386-b914-2e09cf83650c",
                 "nummer": 2,
                 "startDatum": "2022-10-01",
                 "endDatum": "2022-03-30",
@@ -138,7 +118,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "e5e50d06-b51b-4d75-937c-aeba61fbb302",
+                        "id": "ecddc596-b264-4790-aea7-cbc8404abef9",
                         "modulName": "Modul 2.1",
                         "modulID": "M21",
                         "beschreibung": "Beschreibung für Modul 2.1",
@@ -146,7 +126,7 @@
                         "semesterZuordnung": 2,
                         "pruefungsleistungen": [
                             {
-                                "id": "229db592-2826-4ef2-a44a-1bc57e6054f7",
+                                "id": "08b08cf9-62a2-4f71-a116-731d9c87fd03",
                                 "art": "Klausur",
                                 "datum": "2022-02-15",
                                 "beschreibung": "Prüfung für Modul 2.1",
@@ -154,7 +134,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "121f1147-95e7-4b48-a306-1fdbe2a5fc13",
+                                    "id": "3ae714d9-40aa-4ee5-bcd2-bb4836d35cf5",
                                     "typ": "Note",
                                     "wert": 2.3,
                                     "gewichtung": 1.0,
@@ -163,13 +143,13 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "e5e50d06-b51b-4d75-937c-aeba61fbb302"
+                                "modul_id": "ecddc596-b264-4790-aea7-cbc8404abef9"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "d59e99c2-f965-4041-bce0-ac8486a01b79",
+                        "id": "91b74e74-4c9c-463b-96ba-b53bc8f85557",
                         "modulName": "Modul 2.2",
                         "modulID": "M22",
                         "beschreibung": "Beschreibung für Modul 2.2",
@@ -177,7 +157,7 @@
                         "semesterZuordnung": 2,
                         "pruefungsleistungen": [
                             {
-                                "id": "d4ee181c-a414-4acb-8327-d47255694874",
+                                "id": "e8405b93-ee7f-43f6-803a-c95c42a7a8f7",
                                 "art": "Hausarbeit",
                                 "datum": "2022-02-15",
                                 "beschreibung": "Prüfung für Modul 2.2",
@@ -185,7 +165,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "559be4e1-5959-4e84-9848-db63d5886c52",
+                                    "id": "09510f43-5fed-4cbc-8f79-84ca0d8f1221",
                                     "typ": "Note",
                                     "wert": 3.0,
                                     "gewichtung": 1.0,
@@ -194,13 +174,13 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "d59e99c2-f965-4041-bce0-ac8486a01b79"
+                                "modul_id": "91b74e74-4c9c-463b-96ba-b53bc8f85557"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "2c428f54-7f0f-4ed0-9380-302b7b64a6d8",
+                        "id": "d08c79c9-194b-4448-885a-1b00b2cc5f4c",
                         "modulName": "Modul 2.3",
                         "modulID": "M23",
                         "beschreibung": "Beschreibung für Modul 2.3",
@@ -208,7 +188,7 @@
                         "semesterZuordnung": 2,
                         "pruefungsleistungen": [
                             {
-                                "id": "86c06698-9c43-43ed-9248-77b61bd46486",
+                                "id": "79c8e5cb-1d76-44c7-9126-937e100e2b17",
                                 "art": "Klausur",
                                 "datum": "2022-02-15",
                                 "beschreibung": "Prüfung für Modul 2.3",
@@ -216,7 +196,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "5f1412e5-d3e3-42c9-87c9-0e9f141e00f3",
+                                    "id": "e2d65cc9-ce70-4c05-833e-9b2aea338821",
                                     "typ": "Note",
                                     "wert": 1.0,
                                     "gewichtung": 1.0,
@@ -225,7 +205,7 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "2c428f54-7f0f-4ed0-9380-302b7b64a6d8"
+                                "modul_id": "d08c79c9-194b-4448-885a-1b00b2cc5f4c"
                             }
                         ],
                         "required_for_completion": []
@@ -233,7 +213,7 @@
                 ]
             },
             {
-                "id": "edf60ab3-c869-4af1-a5e8-301e93c7e020",
+                "id": "891be8ff-e178-4eef-8d0c-5e981cbd562e",
                 "nummer": 3,
                 "startDatum": "2023-04-01",
                 "endDatum": "2023-09-30",
@@ -242,7 +222,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "20c2f86f-80be-4e42-a39f-2a1441796c06",
+                        "id": "60e87e59-d906-4adb-80b4-71789c332c25",
                         "modulName": "Modul 3.1",
                         "modulID": "M31",
                         "beschreibung": "Beschreibung für Modul 3.1",
@@ -250,7 +230,7 @@
                         "semesterZuordnung": 3,
                         "pruefungsleistungen": [
                             {
-                                "id": "141a9972-d3b0-4622-977f-d988d4b00f39",
+                                "id": "f9c14381-baba-4e4a-af77-c4a9d6146c86",
                                 "art": "Klausur",
                                 "datum": "2023-07-15",
                                 "beschreibung": "Prüfung für Modul 3.1",
@@ -258,7 +238,7 @@
                                 "versuche": 1,
                                 "anmerkung": "",
                                 "note": {
-                                    "id": "8de81be2-306d-432d-b59e-e9ec93a44ded",
+                                    "id": "9dffc243-82ef-48c2-a7fd-0020d674f642",
                                     "typ": "Note",
                                     "wert": 2.7,
                                     "gewichtung": 1.0,
@@ -267,13 +247,13 @@
                                     "punkte": 0
                                 },
                                 "bestanden": true,
-                                "modul_id": "20c2f86f-80be-4e42-a39f-2a1441796c06"
+                                "modul_id": "60e87e59-d906-4adb-80b4-71789c332c25"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "661b5a7e-15f5-4050-869f-7af901f9a72d",
+                        "id": "bd02459f-54b0-43f5-bde9-4d1c7fd968c3",
                         "modulName": "Modul 3.2",
                         "modulID": "M32",
                         "beschreibung": "Beschreibung für Modul 3.2",
@@ -281,7 +261,7 @@
                         "semesterZuordnung": 3,
                         "pruefungsleistungen": [
                             {
-                                "id": "24a384f5-47f4-4aa5-a371-f3572882552c",
+                                "id": "641264b8-27ee-4440-9f3a-40c0138bee1f",
                                 "art": "Klausur",
                                 "datum": "2025-04-07",
                                 "beschreibung": "Anstehende Prüfung für Modul 3.2",
@@ -290,13 +270,13 @@
                                 "anmerkung": "",
                                 "note": null,
                                 "bestanden": false,
-                                "modul_id": "661b5a7e-15f5-4050-869f-7af901f9a72d"
+                                "modul_id": "bd02459f-54b0-43f5-bde9-4d1c7fd968c3"
                             }
                         ],
                         "required_for_completion": []
                     },
                     {
-                        "id": "81cecf61-a6bc-4356-8f13-7f2483122390",
+                        "id": "2427ff07-0bf9-4859-90a3-976c6b98d9c3",
                         "modulName": "Modul 3.3",
                         "modulID": "M33",
                         "beschreibung": "Beschreibung für Modul 3.3",
@@ -304,7 +284,7 @@
                         "semesterZuordnung": 3,
                         "pruefungsleistungen": [
                             {
-                                "id": "25c2007c-327f-4a9d-9f2e-ae34af9f8d87",
+                                "id": "318190ad-5dd0-4c25-aad7-aac617e21c3d",
                                 "art": "Hausarbeit",
                                 "datum": "2025-04-07",
                                 "beschreibung": "Anstehende Prüfung für Modul 3.3",
@@ -313,25 +293,15 @@
                                 "anmerkung": "",
                                 "note": null,
                                 "bestanden": false,
-                                "modul_id": "81cecf61-a6bc-4356-8f13-7f2483122390"
+                                "modul_id": "2427ff07-0bf9-4859-90a3-976c6b98d9c3"
                             }
                         ],
-                        "required_for_completion": []
-                    },
-                    {
-                        "id": "1c7823cb-4b9f-4daf-aeb5-74350885edbe",
-                        "modulName": "TESTMODUL",
-                        "modulID": "",
-                        "beschreibung": "TESTMODUL",
-                        "ects": 5,
-                        "semesterZuordnung": 3,
-                        "pruefungsleistungen": [],
                         "required_for_completion": []
                     }
                 ]
             },
             {
-                "id": "cfef140f-05c5-45ad-aadb-1585a67a9c8a",
+                "id": "fd9e1743-a3c6-4fd7-bbd1-23999d8194cf",
                 "nummer": 4,
                 "startDatum": "2023-10-01",
                 "endDatum": "2023-03-30",
@@ -340,7 +310,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "e9912c38-3684-4512-a6b8-21d0070ba200",
+                        "id": "32f08f3e-0600-435c-a706-304ce8a78cda",
                         "modulName": "Modul 4.1",
                         "modulID": "M41",
                         "beschreibung": "Beschreibung für Modul 4.1",
@@ -350,7 +320,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "b688b12d-4d69-4661-9aff-c6534dcc6d23",
+                        "id": "291484a9-e2ab-4202-83e3-8ed37a9dbb23",
                         "modulName": "Modul 4.2",
                         "modulID": "M42",
                         "beschreibung": "Beschreibung für Modul 4.2",
@@ -360,7 +330,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "081504cd-fb84-4dc7-94da-946a6790af89",
+                        "id": "57200252-25a7-4e9d-99fe-08bce6b29851",
                         "modulName": "Modul 4.3",
                         "modulID": "M43",
                         "beschreibung": "Beschreibung für Modul 4.3",
@@ -372,7 +342,7 @@
                 ]
             },
             {
-                "id": "0434c187-2589-4ed6-94f8-ebd6f4e749ce",
+                "id": "706ab1d0-7df6-460c-b664-9ed62a8155cc",
                 "nummer": 5,
                 "startDatum": "2024-04-01",
                 "endDatum": "2024-09-30",
@@ -381,7 +351,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "4c67bf04-b431-473f-9f15-7efd6674e4cf",
+                        "id": "dd79344c-e71d-4158-9f42-5b0305019014",
                         "modulName": "Modul 5.1",
                         "modulID": "M51",
                         "beschreibung": "Beschreibung für Modul 5.1",
@@ -391,7 +361,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "7fd050f5-e62f-404d-868a-1f05ed5bf374",
+                        "id": "a4454658-7e3e-4fa9-9613-8b4d264223d7",
                         "modulName": "Modul 5.2",
                         "modulID": "M52",
                         "beschreibung": "Beschreibung für Modul 5.2",
@@ -401,7 +371,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "eaa8acae-8f5c-4877-8a1f-eafc346a4858",
+                        "id": "2826ffde-d56d-43c2-a2a5-3c83d32506e4",
                         "modulName": "Modul 5.3",
                         "modulID": "M53",
                         "beschreibung": "Beschreibung für Modul 5.3",
@@ -413,7 +383,7 @@
                 ]
             },
             {
-                "id": "42398472-fcc0-46cc-9bb1-183c0e4e57f4",
+                "id": "5e5fd648-0fd6-4092-9cd2-48d43e4a0767",
                 "nummer": 6,
                 "startDatum": "2024-10-01",
                 "endDatum": "2024-03-30",
@@ -422,7 +392,7 @@
                 "aktiv": false,
                 "module": [
                     {
-                        "id": "95099cf6-a4e3-420e-8ebe-bd9a47d4c843",
+                        "id": "f48c565a-d06a-41cd-86bf-b1541f22c823",
                         "modulName": "Modul 6.1",
                         "modulID": "M61",
                         "beschreibung": "Beschreibung für Modul 6.1",
@@ -432,7 +402,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "4444e244-a742-4d92-a790-778828ac6acb",
+                        "id": "572a4887-c0b4-4bbf-a5a6-cf83699f5d59",
                         "modulName": "Modul 6.2",
                         "modulID": "M62",
                         "beschreibung": "Beschreibung für Modul 6.2",
@@ -442,7 +412,7 @@
                         "required_for_completion": []
                     },
                     {
-                        "id": "247b297e-aa2c-433b-8497-3db8b1fa3354",
+                        "id": "533dd422-1624-4058-8be3-75ff2dba94bb",
                         "modulName": "Modul 6.3",
                         "modulID": "M63",
                         "beschreibung": "Beschreibung für Modul 6.3",
@@ -456,20 +426,20 @@
         ]
     },
     "student": {
-        "id": "0208d71a-40ee-4f22-ace0-7752c975cf46",
+        "id": "4cdce5f4-ce51-407d-b0fc-ba3af227a38e",
         "vorname": "Markus",
         "nachname": "Musterstudent",
         "geburtsdatum": "1985-05-12",
         "email": "markus.musterstudent@iu-example.de",
         "matrikelNr": "IU12079055",
         "immatrikulationsdatum": "2025-03-24",
-        "zielNotendurchschnitt": 1.8,
+        "zielNotendurchschnitt": 2.0,
         "absolvierteECTS": 70,
         "fokus": "Informatik",
         "aktuelleSemesterZahl": 3,
         "pruefungsleistungen": [
             {
-                "id": "272f60aa-33e7-47d7-a721-e9521a28acbf",
+                "id": "247609bf-1494-4606-913f-d8ab8e4ade1c",
                 "art": "Klausur",
                 "datum": "2022-07-15",
                 "beschreibung": "Prüfung für Modul 1.1",
@@ -477,7 +447,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "0c6efedb-00e7-40ad-ad1f-09b2838d2724",
+                    "id": "fb2b94f3-88a7-49ee-9c6b-3b66dce9812b",
                     "typ": "Note",
                     "wert": 1.3,
                     "gewichtung": 1.0,
@@ -486,10 +456,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "2d7129dd-091a-4cdb-b1b0-1e3ba0dacd85"
+                "modul_id": "d449528b-3c8a-493d-add1-a457a96ee95e"
             },
             {
-                "id": "8d9f08b0-23a4-4391-b61f-4ef1f60521b2",
+                "id": "621bbf36-39ad-490b-83c8-7fee6b24af7d",
                 "art": "Hausarbeit",
                 "datum": "2022-07-15",
                 "beschreibung": "Prüfung für Modul 1.2",
@@ -497,7 +467,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "56f82562-b9c8-40af-b668-8efd4b7ddbef",
+                    "id": "1a5ab10b-1bcc-4c88-adce-dfa8dcd915aa",
                     "typ": "Note",
                     "wert": 2.0,
                     "gewichtung": 1.0,
@@ -506,10 +476,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "12723710-eda9-48c3-97e6-a6df1a66fe4f"
+                "modul_id": "40999e48-991b-4b97-8c92-d9a8c7656c78"
             },
             {
-                "id": "2ab0c7f2-1d46-4fda-b52b-7ab0d88b8c99",
+                "id": "460eb1e0-96a1-4e23-a919-ef0856da77b2",
                 "art": "Klausur",
                 "datum": "2022-07-15",
                 "beschreibung": "Prüfung für Modul 1.3",
@@ -517,7 +487,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "aff5fb6c-ac15-457c-8062-fbcabe86f596",
+                    "id": "7238ecbe-23ed-4412-a760-2113dc1ec375",
                     "typ": "Note",
                     "wert": 1.7,
                     "gewichtung": 1.0,
@@ -526,10 +496,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "79cb9533-b0f1-4d1e-8914-0f8e1abac64e"
+                "modul_id": "bb996d4f-3b68-4917-85e4-ae35056cf209"
             },
             {
-                "id": "229db592-2826-4ef2-a44a-1bc57e6054f7",
+                "id": "08b08cf9-62a2-4f71-a116-731d9c87fd03",
                 "art": "Klausur",
                 "datum": "2022-02-15",
                 "beschreibung": "Prüfung für Modul 2.1",
@@ -537,7 +507,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "121f1147-95e7-4b48-a306-1fdbe2a5fc13",
+                    "id": "3ae714d9-40aa-4ee5-bcd2-bb4836d35cf5",
                     "typ": "Note",
                     "wert": 2.3,
                     "gewichtung": 1.0,
@@ -546,10 +516,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "e5e50d06-b51b-4d75-937c-aeba61fbb302"
+                "modul_id": "ecddc596-b264-4790-aea7-cbc8404abef9"
             },
             {
-                "id": "d4ee181c-a414-4acb-8327-d47255694874",
+                "id": "e8405b93-ee7f-43f6-803a-c95c42a7a8f7",
                 "art": "Hausarbeit",
                 "datum": "2022-02-15",
                 "beschreibung": "Prüfung für Modul 2.2",
@@ -557,7 +527,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "559be4e1-5959-4e84-9848-db63d5886c52",
+                    "id": "09510f43-5fed-4cbc-8f79-84ca0d8f1221",
                     "typ": "Note",
                     "wert": 3.0,
                     "gewichtung": 1.0,
@@ -566,10 +536,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "d59e99c2-f965-4041-bce0-ac8486a01b79"
+                "modul_id": "91b74e74-4c9c-463b-96ba-b53bc8f85557"
             },
             {
-                "id": "86c06698-9c43-43ed-9248-77b61bd46486",
+                "id": "79c8e5cb-1d76-44c7-9126-937e100e2b17",
                 "art": "Klausur",
                 "datum": "2022-02-15",
                 "beschreibung": "Prüfung für Modul 2.3",
@@ -577,7 +547,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "5f1412e5-d3e3-42c9-87c9-0e9f141e00f3",
+                    "id": "e2d65cc9-ce70-4c05-833e-9b2aea338821",
                     "typ": "Note",
                     "wert": 1.0,
                     "gewichtung": 1.0,
@@ -586,10 +556,10 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "2c428f54-7f0f-4ed0-9380-302b7b64a6d8"
+                "modul_id": "d08c79c9-194b-4448-885a-1b00b2cc5f4c"
             },
             {
-                "id": "141a9972-d3b0-4622-977f-d988d4b00f39",
+                "id": "f9c14381-baba-4e4a-af77-c4a9d6146c86",
                 "art": "Klausur",
                 "datum": "2023-07-15",
                 "beschreibung": "Prüfung für Modul 3.1",
@@ -597,7 +567,7 @@
                 "versuche": 1,
                 "anmerkung": "",
                 "note": {
-                    "id": "8de81be2-306d-432d-b59e-e9ec93a44ded",
+                    "id": "9dffc243-82ef-48c2-a7fd-0020d674f642",
                     "typ": "Note",
                     "wert": 2.7,
                     "gewichtung": 1.0,
@@ -606,37 +576,17 @@
                     "punkte": 0
                 },
                 "bestanden": true,
-                "modul_id": "20c2f86f-80be-4e42-a39f-2a1441796c06"
-            },
-            {
-                "id": "ee097ebe-cbf4-412b-a89b-7428affcbde2",
-                "art": "Klausur",
-                "datum": "2025-03-05",
-                "beschreibung": "Test-Klausur für Mathematik",
-                "deadline": null,
-                "versuche": 1,
-                "anmerkung": "",
-                "note": {
-                    "id": "3057dbe4-4db3-42f0-9b82-8b2d62c32142",
-                    "typ": "Klausur",
-                    "wert": 3.2,
-                    "gewichtung": 1.0,
-                    "datum": "2025-03-24",
-                    "kommentar": "",
-                    "punkte": 0
-                },
-                "bestanden": true,
-                "modul_id": "12723710-eda9-48c3-97e6-a6df1a66fe4f"
+                "modul_id": "60e87e59-d906-4adb-80b4-71789c332c25"
             }
         ],
         "_bestandene_module_ids": [
-            "d59e99c2-f965-4041-bce0-ac8486a01b79",
-            "12723710-eda9-48c3-97e6-a6df1a66fe4f",
-            "79cb9533-b0f1-4d1e-8914-0f8e1abac64e",
-            "e5e50d06-b51b-4d75-937c-aeba61fbb302",
-            "20c2f86f-80be-4e42-a39f-2a1441796c06",
-            "2c428f54-7f0f-4ed0-9380-302b7b64a6d8",
-            "2d7129dd-091a-4cdb-b1b0-1e3ba0dacd85"
+            "60e87e59-d906-4adb-80b4-71789c332c25",
+            "40999e48-991b-4b97-8c92-d9a8c7656c78",
+            "d449528b-3c8a-493d-add1-a457a96ee95e",
+            "ecddc596-b264-4790-aea7-cbc8404abef9",
+            "91b74e74-4c9c-463b-96ba-b53bc8f85557",
+            "bb996d4f-3b68-4917-85e4-ae35056cf209",
+            "d08c79c9-194b-4448-885a-1b00b2cc5f4c"
         ]
     }
 }
