@@ -36,8 +36,8 @@ class DatenManager:
         """
         Speichert den aktuellen Zustand des Studiengangs und des Studenten in eine Datei.
 
-        Diese Methode konvertiert die Objekte in Dictionaries und speichert sie als
-        JSON-Datei. Sie erstellt auch das Verzeichnis, falls es nicht existiert.
+        Diese Methode konvertiert die Objekte in serialisierbare Dictionaries und
+        speichert sie als JSON-Datei. Sie erstellt auch das Verzeichnis, falls es nicht existiert.
 
         Parameter:
             studiengang: Das zu speichernde Studiengang-Objekt
@@ -115,7 +115,7 @@ class DatenManager:
 
     def export_csv(self, student: Student, studiengang: Studiengang, export_pfad: str = "noten_export.csv") -> bool:
         """
-        Exportiert Studentennoten und Modulinformationen in eine CSV-Datei.
+        Exportiert Studentennoten in eine CSV-Datei.
 
         Diese Methode generiert eine strukturierte CSV-Datei mit allen Prüfungsleistungen
         des Studenten, was den Export in andere Anwendungen oder zur Archivierung ermöglicht.
@@ -158,11 +158,15 @@ class DatenManager:
                     # Finde das zugehörige Modul
                     modul_id = pruefung.modul_id
                     modul_name = "Unbekannt"
+                    modul_nummer = ""
+
                     if modul_id and modul_id in module:
-                        modul_name = module[modul_id].modulName
+                        modul = module[modul_id]
+                        modul_name = modul.modulName
+                        modul_nummer = modul.modulID
 
                     writer.writerow([
-                        modul_id or "",
+                        modul_nummer,  # Benutzerfreundliche ID statt interner UUID
                         modul_name,
                         pruefung.art,
                         pruefung.datum.isoformat() if pruefung.datum else "N/A",
@@ -189,7 +193,7 @@ class DatenManager:
             row: Eine Zeile aus der CSV-Datei als Dictionary
 
         Rückgabe:
-            Eine Liste mit Fehlermeldungen, leer - wenn keine Fehler gefunden wurden
+            Eine Liste mit Fehlermeldungen, leer wenn keine Fehler gefunden wurden
         """
         issues = []
 
@@ -197,7 +201,7 @@ class DatenManager:
         if "Prüfungsart" not in row or not row.get("Prüfungsart"):
             issues.append("Prüfungsart fehlt oder ist leer")
 
-        # Validiere Datum - wenn vorhanden
+        # Validiere Datum, wenn vorhanden
         if "Datum" in row and row.get("Datum") and row.get("Datum") != "N/A":
             try:
                 date.fromisoformat(row["Datum"])
@@ -249,6 +253,8 @@ class DatenManager:
 
             # Sammle alle Module für schnelleren Zugriff
             module_by_id = {modul.id: modul for modul in studiengang.get_all_module()}
+            module_by_modulID = {modul.modulID: modul for modul in
+                                 studiengang.get_all_module()}
             module_by_name = {modul.modulName: modul for modul in studiengang.get_all_module()}
 
             # Überprüfe die CSV-Struktur
@@ -289,17 +295,22 @@ class DatenManager:
                         modul_id = row.get("Modul_ID")
                         modul_name = row.get("Modul_Name")
 
-                        if modul_id and modul_id in module_by_id:
-                            modul = module_by_id[modul_id]
+                        # Suche zuerst nach der ID
+                        if modul_id and modul_id in module_by_modulID:
+                            modul = module_by_modulID[modul_id]
+                        # Falls nicht gefunden, versuche es mit dem Namen
                         elif modul_name and modul_name in module_by_name:
                             modul = module_by_name[modul_name]
+                        # Falls beides nicht funktioniert, erstelle ein neues Modul
                         elif modul_name:
-                            # Wenn das Modul nicht existiert, erstelle ein neues
-                            logger.info(f"Modul '{modul_name}' nicht gefunden. Erstelle neu.")
-                            print(f"Modul '{modul_name}' nicht gefunden. Erstelle neu.")
+                            # Erstelle ein neues Modul mit der ID aus der CSV
+                            new_modul_id = modul_id if modul_id else f"M{len(module_by_name) + 1}"
+                            logger.info(f"Modul '{modul_name}' nicht gefunden. Erstelle neu mit ID '{new_modul_id}'.")
+                            print(f"Modul '{modul_name}' nicht gefunden. Erstelle neu mit ID '{new_modul_id}'.")
+
                             modul = Modul(
                                 modulName=modul_name,
-                                modulID=f"M{len(module_by_name) + 1}",
+                                modulID=new_modul_id,
                                 ects=5,  # Standardwert
                                 semesterZuordnung=1  # Standardwert
                             )
@@ -312,6 +323,7 @@ class DatenManager:
 
                             # Aktualisiere Lookup-Dictionaries
                             module_by_id[modul.id] = modul
+                            module_by_modulID[modul.modulID] = modul
                             module_by_name[modul.modulName] = modul
 
                         # Erstelle eine neue Prüfungsleistung
@@ -324,7 +336,7 @@ class DatenManager:
 
                         # Setze die Modul-ID, falls ein Modul gefunden wurde
                         if modul:
-                            pruefung.modul_id = modul.id
+                            pruefung.modul_id = modul.id  # Hier verwenden wir wieder die interne UUID
 
                         # Füge Note hinzu, falls vorhanden
                         note_wert = row.get("Note")
