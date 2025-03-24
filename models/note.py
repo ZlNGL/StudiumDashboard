@@ -10,7 +10,7 @@ class Note(BaseModel):
 
     Diese Klasse speichert alle Informationen zu einer Note, einschließlich ihres Werts,
     ihrer Gewichtung und zusätzlicher Metadaten wie Datum und Kommentare. Sie bietet
-    auch Methoden zur Berechnung gewichteter Noten und Bestehensüberprüfungen.
+    auch Methoden zur Berechnung gewichteter Noten und Überprüfungen, ob bestanden oder nicht.
     """
 
     def __init__(self, typ: str, wert: float, gewichtung: float = 1.0,
@@ -49,14 +49,14 @@ class Note(BaseModel):
         """
         Überprüft, ob die Note als bestanden gilt.
 
-        Im deutschen Notensystem sind Noten von 1.0 bis 4.0 bestanden,
+        In unserem Notensystem sind Noten von 1.0 bis 4.0 bestanden,
         während Noten größer als 4.0 als nicht bestanden gelten.
 
         Parameter:
-            grenze: Der Schwellenwert für das Bestehen (Standard: 4.0 im deutschen Notensystem)
+            grenze: Der Schwellenwert für das Bestehen (Standard: 4.0)
 
         Rückgabe:
-            True, wenn die Note bestanden ist, False sonst
+            True, wenn die Note bestanden ist, sonst False
         """
         return self.wert <= grenze
 

@@ -10,7 +10,7 @@ class Studiengang(BaseModel):
     """
     Klasse zur Repräsentation eines Studiengangs.
 
-    Ein Studiengang ist die übergeordnete Organisationseinheit, die mehrere Semester
+    Ein Studiengang ist die übergeordnete Einheit, die mehrere Semester
     umfasst und den Rahmen für das gesamte Studium bildet. Diese Klasse verwaltet
     die Semesterstruktur und bietet Methoden zur Analyse des Studienverlaufs.
     """
@@ -66,7 +66,7 @@ class Studiengang(BaseModel):
         Gibt alle Module des Studiengangs über alle Semester hinweg zurück.
 
         Diese Methode sammelt alle Module aus allen Semestern des Studiengangs
-        und gibt sie als flache Liste zurück.
+        und gibt sie als Liste zurück.
 
         Rückgabe:
             Eine Liste aller Module im Studiengang
@@ -81,7 +81,7 @@ class Studiengang(BaseModel):
         Gibt ein bestimmtes Semester anhand seiner Nummer zurück.
 
         Diese Methode durchsucht die Semesterliste nach einem Semester mit der
-        angegebenen Nummer und gibt es zurück, wenn gefunden.
+        angegebenen Nummer und gibt es, wenn gefunden, zurück.
 
         Parameter:
             nummer: Die Semesternummer, die gesucht werden soll
@@ -101,7 +101,7 @@ class Studiengang(BaseModel):
 
         Diese Methode klassifiziert Module in drei Kategorien:
         - bestanden: Module, die der Student bereits bestanden hat
-        - belegt: Module, in denen der Student Prüfungen abgelegt hat, aber nicht bestanden
+        - belegt: Module, in denen der Student Prüfungen abgelegt hat, aber (noch) nicht bestanden
         - offen: Module, die der Student noch nicht belegt hat
 
         Parameter:
@@ -112,7 +112,7 @@ class Studiengang(BaseModel):
         """
         result = {
             "bestanden": [],  # Bereits bestandene Module
-            "belegt": [],  # Module, in denen Prüfungen abgelegt wurden, aber nicht bestanden
+            "belegt": [],  # Module, in denen Prüfungen abgelegt wurden, aber (noch) nicht bestanden
             "offen": []  # Noch nicht belegte Module
         }
 
@@ -155,7 +155,7 @@ class Studiengang(BaseModel):
         """
         Konvertiert das Studiengang-Objekt in ein Dictionary zur Serialisierung.
 
-        Diese Methode ist wichtig für die Persistenz der Daten und wandelt
+        Diese Methode ist wichtig für die Speicherung der Daten und wandelt
         alle komplexen Typen in serialisierbare Formate um.
 
         Rückgabe:

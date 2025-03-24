@@ -19,7 +19,7 @@ class Pruefungsleistung(BaseModel):
                  beschreibung: str = "", deadline: date = None,
                  versuche: int = 1, anmerkung: str = ""):
         """
-        Initialisiert ein Pruefungsleistung-Objekt mit den angegebenen Parametern.
+        Initialisiert ein Pruefungsleistungs-Objekt mit den angegebenen Parametern.
 
         Parameter:
             art: Art der Prüfung (z.B. "Klausur", "Hausarbeit", "mündliche Prüfung")
@@ -111,15 +111,15 @@ class Pruefungsleistung(BaseModel):
         Überprüft, ob die Prüfung bestanden wurde.
 
         Rückgabe:
-            True, wenn die Prüfung bestanden wurde, False sonst
+            True, wenn die Prüfung bestanden wurde, sonst False
         """
         return self.bestanden
 
     def to_dict(self) -> Dict[str, Any]:
         """
-        Konvertiert das Pruefungsleistung-Objekt in ein Dictionary zur Serialisierung.
+        Konvertiert das Pruefungsleistungs-Objekt in ein Dictionary zur Serialisierung.
 
-        Diese Methode ist wichtig für die Persistenz der Daten, z.B. wenn sie
+        Diese Methode ist wichtig für die Speicherung der Daten, z.B. wenn sie
         in einer JSON-Datei gespeichert werden sollen.
 
         Rückgabe:

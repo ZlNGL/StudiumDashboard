@@ -18,7 +18,7 @@ class DatenManager:
     Klasse, die für Datenverwaltungsoperationen wie das Speichern, Laden,
     Importieren und Exportieren von Daten verantwortlich ist.
 
-    Der DatenManager dient als zentrale Komponente für die Persistenz von
+    Der DatenManager dient als zentrale Komponente für die Speicherung von
     Daten und bietet eine einheitliche Schnittstelle für den Zugriff auf
     verschiedene Dateiformate (JSON, CSV).
     """
@@ -36,15 +36,15 @@ class DatenManager:
         """
         Speichert den aktuellen Zustand des Studiengangs und des Studenten in eine Datei.
 
-        Diese Methode konvertiert die Objekte in serialisierbare Dictionaries und
-        speichert sie als JSON-Datei. Sie erstellt auch das Verzeichnis, falls es nicht existiert.
+        Diese Methode konvertiert die Objekte in Dictionaries und speichert sie als
+        JSON-Datei. Sie erstellt auch das Verzeichnis, falls es nicht existiert.
 
         Parameter:
             studiengang: Das zu speichernde Studiengang-Objekt
             student: Das zu speichernde Student-Objekt
 
         Rückgabe:
-            True, wenn der Speichervorgang erfolgreich war, False sonst
+            True, wenn der Speichervorgang erfolgreich war, sonst False
         """
         try:
             # Stelle sicher, dass beide Objekte existieren
@@ -115,11 +115,10 @@ class DatenManager:
 
     def export_csv(self, student: Student, studiengang: Studiengang, export_pfad: str = "noten_export.csv") -> bool:
         """
-        Exportiert Studentennoten in eine CSV-Datei.
+        Exportiert Studentennoten und Modulinformationen in eine CSV-Datei.
 
         Diese Methode generiert eine strukturierte CSV-Datei mit allen Prüfungsleistungen
         des Studenten, was den Export in andere Anwendungen oder zur Archivierung ermöglicht.
-        Die Methode wurde erweitert, um auch Modulinformationen zu exportieren.
 
         Parameter:
             student: Das Student-Objekt, dessen Noten exportiert werden sollen
@@ -127,7 +126,7 @@ class DatenManager:
             export_pfad: Pfad zur Export-Datei (Standard: "noten_export.csv")
 
         Rückgabe:
-            True, wenn der Export erfolgreich war, False sonst
+            True, wenn der Export erfolgreich war, sonst False
         """
         try:
             if not student:
@@ -190,7 +189,7 @@ class DatenManager:
             row: Eine Zeile aus der CSV-Datei als Dictionary
 
         Rückgabe:
-            Eine Liste mit Fehlermeldungen, leer wenn keine Fehler gefunden wurden
+            Eine Liste mit Fehlermeldungen, leer - wenn keine Fehler gefunden wurden
         """
         issues = []
 
@@ -198,7 +197,7 @@ class DatenManager:
         if "Prüfungsart" not in row or not row.get("Prüfungsart"):
             issues.append("Prüfungsart fehlt oder ist leer")
 
-        # Validiere Datum wenn vorhanden
+        # Validiere Datum - wenn vorhanden
         if "Datum" in row and row.get("Datum") and row.get("Datum") != "N/A":
             try:
                 date.fromisoformat(row["Datum"])
@@ -231,9 +230,7 @@ class DatenManager:
 
         Diese Methode liest eine CSV-Datei mit Prüfungsdaten und fügt die
         entsprechenden Prüfungsleistungen zum Studenten und zu den passenden
-        Modulen des Studiengangs hinzu. Die Methode wurde verbessert, um Modul-IDs
-        für eine bessere Zuordnung zu verwenden und enthält nun eine erweiterte
-        Validierung der Eingabedaten.
+        Modulen des Studiengangs hinzu.
 
         Parameter:
             student: Das Student-Objekt, zu dem die Noten hinzugefügt werden sollen
@@ -241,7 +238,7 @@ class DatenManager:
             import_pfad: Pfad zur Import-Datei
 
         Rückgabe:
-            True, wenn der Import erfolgreich war, False sonst
+            True, wenn der Import erfolgreich war, sonst False
         """
         try:
             # Überprüfe, ob die Datei existiert

@@ -32,8 +32,8 @@ class Modul(BaseModel):
         self.beschreibung = beschreibung
         self.ects = ects
         self.semesterZuordnung = semesterZuordnung
-        self.pruefungsleistungen = []  # Liste von Pruefungsleistung-Objekten, initial leer
-        self.required_for_completion = []  # Liste von Prüfungsarten, die zum Bestehen erforderlich sind (leer = alle)
+        self.pruefungsleistungen = []  # Liste von Pruefungsleistungs-Objekten
+        self.required_for_completion = []  # Liste von Prüfungsarten, die zum Bestehen erforderlich sind
 
     def get_ects(self) -> int:
         """
@@ -65,7 +65,7 @@ class Modul(BaseModel):
             student: Das Student-Objekt, für das geprüft werden soll
 
         Rückgabe:
-            True, wenn das Modul vom Studenten abgeschlossen wurde, False sonst
+            True, wenn das Modul vom Studenten abgeschlossen wurde, sonst False
         """
         # Wenn keine Prüfungsleistungen vorhanden sind, ist das Modul nicht bestanden
         if not self.pruefungsleistungen:
@@ -94,7 +94,7 @@ class Modul(BaseModel):
         oder Hausarbeiten mit diesem Modul zu verknüpfen.
 
         Parameter:
-            pruefung: Das Pruefungsleistung-Objekt, das hinzugefügt werden soll
+            pruefung: Das Pruefungsleistungs-Objekt welches hinzugefügt werden soll
         """
         if not isinstance(pruefung, Pruefungsleistung):
             raise TypeError("pruefung muss vom Typ Pruefungsleistung sein")
@@ -128,7 +128,7 @@ class Modul(BaseModel):
         """
         Konvertiert das Modul-Objekt in ein Dictionary zur Serialisierung.
 
-        Diese Methode ist wichtig für die Persistenz der Daten, z.B. wenn sie
+        Diese Methode ist wichtig für die Speicherung der Daten, z.B. wenn sie
         in einer JSON-Datei gespeichert werden sollen.
 
         Rückgabe:

@@ -95,7 +95,7 @@ class BenutzerInteraktion:
         print(f"Student: {student.get_fullname()} (Matrikel-Nr: {student.matrikelNr})")
         print(f"Aktuelles Semester: {student.aktuelleSemesterZahl}")
 
-        # Berechne ECTS-Fortschritt sicher
+        # Berechne ECTS-Fortschritt
         ects_prozent = 0
         if studiengang.gesamtECTS > 0:
             ects_prozent = (student.absolvierteECTS / studiengang.gesamtECTS * 100)
@@ -256,7 +256,7 @@ class BenutzerInteraktion:
             pruefung_data["beschreibung"] = input("Beschreibung: ")
             pruefung_data["typ"] = input("Notentyp (Klausur, Hausarbeit, etc.): ")
 
-            # Erfasse Note mit Fehlerbehandlung
+            # Erfasse Note
             while True:
                 wert_str = input("Note (z.B. 1.7): ")
                 try:
@@ -265,7 +265,7 @@ class BenutzerInteraktion:
                 except ValueError:
                     print("Ungültiger Notenwert. Bitte eine Zahl eingeben.")
 
-            # Erfasse optionale Gewichtung mit Fehlerbehandlung
+            # Erfasse optionale Gewichtung
             while True:
                 gewichtung_str = input("Gewichtung (1.0 für normal, leer für Standard): ")
                 if not gewichtung_str:
@@ -308,7 +308,7 @@ class BenutzerInteraktion:
             modul_data["id"] = input("Modul-ID (leer für automatisch): ")
             modul_data["beschreibung"] = input("Beschreibung: ")
 
-            # Erfasse ECTS-Punkte mit Fehlerbehandlung
+            # Erfasse ECTS-Punkte
             while True:
                 ects_str = input("ECTS (Standard: 5): ")
                 if not ects_str:
@@ -320,7 +320,7 @@ class BenutzerInteraktion:
                 except ValueError:
                     print("Ungültige ECTS-Punktzahl. Bitte eine ganze Zahl eingeben oder leer lassen.")
 
-            # Erfasse Semester mit Fehlerbehandlung
+            # Erfasse Semester
             while True:
                 semester_str = input("Semester (1, 2, etc.): ")
                 if not semester_str:
@@ -361,7 +361,7 @@ class BenutzerInteraktion:
         print(f"Aktueller Ziel-Notendurchschnitt: {current:.2f}")
 
         try:
-            # Erfasse neuen Zielwert mit Fehlerbehandlung
+            # Erfasse neuen Zielwert
             while True:
                 ziel_str = input("Neuer Ziel-Notendurchschnitt: ")
                 try:
@@ -524,7 +524,7 @@ class BenutzerInteraktion:
         student_data["vorname"] = input("Vorname: ")
         student_data["nachname"] = input("Nachname: ")
 
-        # Verbesserte Datumseingabe mit Validierung
+        # Datumseingabe mit Validierung
         student_data["geburtsdatum"] = self.get_validated_date("Geburtsdatum (TT.MM.JJJJ, leer für heute): ")
         if not student_data["geburtsdatum"]:
             student_data["geburtsdatum"] = date.today()
@@ -532,7 +532,7 @@ class BenutzerInteraktion:
         student_data["matrikelNr"] = input("Matrikel-Nr: ")
         student_data["email"] = input("E-Mail: ")
 
-        # Erfasse Ziel-Notendurchschnitt mit Fehlerbehandlung
+        # Erfasse Ziel-Notendurchschnitt
         while True:
             ziel_str = input("Ziel-Notendurchschnitt (Standard: 2.0): ")
             if not ziel_str:
@@ -563,7 +563,7 @@ class BenutzerInteraktion:
         studiengang_data = {}
         studiengang_data["name"] = input("Name des Studiengangs: ")
 
-        # Erfasse Gesamt-ECTS mit Fehlerbehandlung
+        # Erfasse Gesamt-ECTS
         while True:
             gesamtECTS_str = input("Gesamte ECTS (Standard: 180): ")
             if not gesamtECTS_str:

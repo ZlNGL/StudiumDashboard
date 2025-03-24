@@ -71,7 +71,7 @@ class Semester(BaseModel):
         Start- und Enddatum liegt, oder wenn das 'aktiv'-Flag gesetzt ist.
 
         Rückgabe:
-            True, wenn das Semester aktiv ist, False sonst
+            True, wenn das Semester aktiv ist, sonst False
         """
         today = date.today()
         if not (self.startDatum and self.endDatum):
@@ -95,7 +95,7 @@ class Semester(BaseModel):
         """
         Konvertiert das Semester-Objekt in ein Dictionary zur Serialisierung.
 
-        Diese Methode ist wichtig für die Persistenz der Daten und wandelt alle
+        Diese Methode ist wichtig für die Speicherung der Daten und wandelt alle
         komplexen Typen (wie date-Objekte) in serialisierbare Formate um.
 
         Rückgabe:
@@ -115,7 +115,7 @@ class Semester(BaseModel):
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Semester':
-        # Erst mit der Semesternummer erstellen
+        # Semesternummer erstellen
         temp_nummer = data.get("nummer", 1)
         semester = cls(nummer=temp_nummer)
 

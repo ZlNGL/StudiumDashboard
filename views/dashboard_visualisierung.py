@@ -70,7 +70,7 @@ class DashboardVisualisierung:
             ax.set_ylabel(y_label)
             ax.set_title(titel)
 
-            # Füge Werte über den Balken hinzu für bessere Lesbarkeit
+            # Füge, für bessere Lesbarkeit, Werte über den Balken hinzu
             for bar in bars:
                 height = bar.get_height()
                 ax.text(bar.get_x() + bar.get_width() / 2., height,
@@ -140,7 +140,7 @@ class DashboardVisualisierung:
             ax.set_ylabel(y_label)
             ax.set_title(titel)
 
-            # Füge Werte an den Datenpunkten hinzu für bessere Lesbarkeit
+            # Füge, für bessere Lesbarkeit, Werte an den Datenpunkten hinzu
             for i, value in enumerate(values):
                 ax.text(i, value, f'{value:.1f}', ha='center', va='bottom')
 
@@ -250,8 +250,8 @@ class DashboardVisualisierung:
             current = noten_data.get("aktuell", 0.0)
 
             bars1 = ax1.bar(["Aktuell", "Ziel"], [current, ziel_note])
-            ax1.set_ylim(0, 5)  # Deutsche Notenskala geht von 1.0 bis 5.0
-            ax1.invert_yaxis()  # Invertiere y-Achse, da im deutschen System kleinere Noten besser sind
+            ax1.set_ylim(0, 5)  # Unsere Notenskala geht von 1.0 bis 5.0
+            ax1.invert_yaxis()  # Invertiere y-Achse, da in unserem System kleinere Noten besser sind
             ax1.set_title("Notendurchschnitt: Aktuell vs. Ziel")
 
             # Füge Werte über den Balken hinzu

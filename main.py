@@ -35,16 +35,16 @@ def init_beispieldaten(dashboard):
         dashboard: Das Dashboard-Objekt, in dem die Beispieldaten gespeichert werden sollen
 
     Rückgabe:
-        True, wenn die Beispieldaten erfolgreich erstellt wurden, False sonst
+        True, wenn die Beispieldaten erfolgreich erstellt wurden, sonst False
     """
     try:
         # Erstelle einen Beispielstudenten
         student = Student(
-            vorname="Max",
-            nachname="Mustermann",
-            geburtsdatum=date(1985, 6, 16),
-            matrikelNr="123456",
-            email="max.mustermann@iu-example.de",
+            vorname="Markus",
+            nachname="Musterstudent",
+            geburtsdatum=date(1985, 5, 12),
+            matrikelNr="IU12079055",
+            email="markus.musterstudent@iu-example.de",
             zielNotendurchschnitt=2.0,
             absolvierteECTS=0,  # Wird später berechnet
             fokus="Informatik",
@@ -54,7 +54,7 @@ def init_beispieldaten(dashboard):
         # Erstelle einen Beispielstudiengang
         studiengang = Studiengang(
             name="Informatik Bachelor",
-            gesamtECTS=180  # Typisch für Bachelor-Studiengänge
+            gesamtECTS=180  # Standard für Bachelor-Studiengänge
         )
 
         # Erstelle Semester mit Modulen und Prüfungen
@@ -218,7 +218,7 @@ def main():
             # Erfasse und verarbeite Benutzereingabe
             choice = input("\nAuswahl treffen (0-9): ")
 
-            # Verbesserte Eingabevalidierung
+            # Eingabevalidierung
             try:
                 choice_num = int(choice)
                 if choice_num < 0 or choice_num > 9:

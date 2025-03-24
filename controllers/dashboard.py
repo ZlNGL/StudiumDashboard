@@ -17,8 +17,8 @@ class Dashboard:
     Zentrale Controller-Klasse, die alle Komponenten verbindet und die Berechnungen
     und Aktualisierungen von Kennzahlen wie Notendurchschnitt und ECTS-Fortschritt verwaltet.
 
-    Das Dashboard fungiert als Vermittler zwischen den Modellklassen (Datenstruktur),
-    dem DatenManager (Persistenz) und den Visualisierungs- und Interaktionskomponenten.
+    Das Dashboard fungiert als Vermittler zwischen den Modellklassen,
+    dem DatenManager und den Visualisierungs- und Interaktionskomponenten.
     Es stellt die Geschäftslogik der Anwendung bereit.
     """
 
@@ -64,10 +64,10 @@ class Dashboard:
         dass neue Daten erstellt werden müssen.
 
         Rückgabe:
-            True, wenn die Initialisierung erfolgreich war, False sonst
+            True, wenn die Initialisierung erfolgreich war, sonst False
         """
         try:
-            # Versuche, bestehende Daten zu laden
+            # Versuche die bestehenden Daten zu laden
             self.studiengang, self.student = self.daten_manager.laden()
 
             # Wenn keine Daten existieren, gib False zurück
@@ -113,7 +113,7 @@ class Dashboard:
             studiengang_data: Dictionary mit Studiengangsinformationen
 
         Rückgabe:
-            True, wenn die Erstellung erfolgreich war, False sonst
+            True, wenn die Erstellung erfolgreich war, sonst False
         """
         try:
             # Erstelle Studenten
@@ -142,10 +142,10 @@ class Dashboard:
         Aktualisiert das Dashboard durch Speichern der aktuellen Daten.
 
         Diese Methode wird nach Änderungen an den Daten aufgerufen,
-        um die aktuellen Zustände zu persistieren.
+        um die aktuellen Zustände zu speichern.
 
         Rückgabe:
-            True, wenn die Aktualisierung erfolgreich war, False sonst
+            True, wenn die Aktualisierung erfolgreich war, sonst False
         """
         if not (self.studiengang and self.student):
             logger.warning("Keine Daten zum Aktualisieren vorhanden.")
@@ -242,7 +242,7 @@ class Dashboard:
             tage: Anzahl der Tage, die vorausgeschaut werden soll (Standard: 30)
 
         Rückgabe:
-            Eine Liste anstehender Pruefungsleistung-Objekte
+            Eine Liste anstehender Pruefungsleistungs-Objekte
         """
         try:
             if not self.studiengang:
@@ -371,7 +371,7 @@ class Dashboard:
         und bietet eine einfache Schnittstelle zum Speichern des aktuellen Zustands.
 
         Rückgabe:
-            True, wenn das Speichern erfolgreich war, False sonst
+            True, wenn das Speichern erfolgreich war, sonst False
         """
         if not (self.studiengang and self.student):
             logger.warning("Keine Daten zum Speichern vorhanden.")
@@ -393,7 +393,7 @@ class Dashboard:
             modul_data: Dictionary mit Modulinformationen
 
         Rückgabe:
-            True, wenn die Erfassung erfolgreich war, False sonst
+            True, wenn die Erfassung erfolgreich war, sonst False
         """
         if not self.studiengang:
             return False
@@ -435,7 +435,7 @@ class Dashboard:
             ziel_durchschnitt: Neuer Ziel-Notendurchschnitt
 
         Rückgabe:
-            True, wenn die Aktualisierung erfolgreich war, False sonst
+            True, wenn die Aktualisierung erfolgreich war, sonst False
         """
         if not self.student:
             return False
@@ -457,7 +457,7 @@ class Dashboard:
             export_pfad: Pfad zur Export-Datei (Standard: "noten_export.csv")
 
         Rückgabe:
-            True, wenn der Export erfolgreich war, False sonst
+            True, wenn der Export erfolgreich war, sonst False
         """
         if not self.student:
             return False

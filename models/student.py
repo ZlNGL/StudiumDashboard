@@ -91,7 +91,7 @@ class Student(Person):
         oder eine bestehende Prüfung aktualisiert wird.
 
         Parameter:
-            pruefung: Das Pruefungsleistung-Objekt, das hinzugefügt werden soll
+            pruefung: Das Pruefungsleistungs-Objekt, das hinzugefügt werden soll
         """
         if not isinstance(pruefung, Pruefungsleistung):
             raise TypeError("pruefung muss vom Typ Pruefungsleistung sein")
@@ -100,7 +100,7 @@ class Student(Person):
 
     def update_ects_for_modul(self, modul: Modul, bestanden: bool) -> None:
         """
-        Aktualisiert die ECTS des Studenten basierend auf dem Bestehenstatus eines Moduls.
+        Aktualisiert die ECTS des Studenten basierend auf dem Bestehen- status eines Moduls.
         Verhindert das Doppelzählen von ECTS für ein Modul.
 
         Parameter:
@@ -144,7 +144,7 @@ class Student(Person):
             modul: Das Modul-Objekt, das überprüft werden soll
 
         Rückgabe:
-            True, wenn das Modul vom Studenten bestanden wurde, False sonst
+            True, wenn das Modul vom Studenten bestanden wurde, sonst False
         """
         if modul.id in self._bestandene_module_ids:
             return True

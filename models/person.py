@@ -67,7 +67,7 @@ class Person(BaseModel):
     def to_dict(self) -> Dict[str, Any]:
         """
         Konvertiert das Person-Objekt in ein Dictionary zur Serialisierung.
-        Dies ist nützlich für die Speicherung der Daten oder die Übertragung über Netzwerke.
+        Dies ist nützlich für die Speicherung der Daten.
 
         Rückgabe:
             Ein Dictionary mit den Attributen der Person
